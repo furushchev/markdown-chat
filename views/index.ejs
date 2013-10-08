@@ -3,24 +3,40 @@
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/github.css' />
+    <link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
+    <link rel='stylesheet' href='/stylesheets/bootstrap-theme.min.css' />
+
 	<script type="text/javascript"
 			src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-	<script type="text/javascript" src="/taboverride/build/output/taboverride.min.js"></script>
-	<script type="text/javascript" src="/jquery.taboverride/build/jquery.taboverride.min.js"></script>
 	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript" src="/javascripts/taboverride.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.taboverride.min.js"></script>
+	<script type="text/javascript" src="/javascripts/bootstrap.min.js"></script>
 	<script type="text/javascript" src="/javascripts/chat.js"></script>
 	<script type="text/javascript" src="/javascripts/index.js"></script>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
-    <h1><%= title %></h1>
-	<form>
-	  <p>Name: <input type="text" name="namae" id="namae"
-	  		 		 size="30" maxlength="30"></p>
+	<div class="page-header">
+      <h1><%= title %></h1>
+	</div>
+    <dl id="list"></dl>
+	<form class="form-inline">
+	  <div class="form-group">
+		<p>Name: <input type="text" name="namae" id="namae" 
+						class="form-control col-xs-4"
+	  		 			size="20" maxlength="20"></p>
+	  </div>
 	  <textarea cols="100", rows="5"
 				name="message" id="message"
+				class="form-control"
 				placeholder="Input text with markdown syntax!"></textarea>
 	</form>
-	<button id="btn">送信</button>
-	<dl id="list"></dl>
+	<div style="margin-top: 10px">
+	  <button id="btn" class="btn btn-default btn-sm">送信</button>
+	  <button id="delete" class="btn btn-danger btn-sm">履歴削除</button>
+	</div>
+	
   </body>
 </html>

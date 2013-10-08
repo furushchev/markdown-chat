@@ -1,6 +1,7 @@
 $(function() {
 	socket = io.connect(location.href);
 	socket.on('connect', function() {
+		socket.emit('msg update');
 		console.log('connected.');
 	});
 
@@ -18,14 +19,36 @@ $(function() {
 		message.val('');
 	});
 
+	$('#delete').click(function(){
+		if(window.confirm("Are you sure?") == true) {
+			socket.emit('deleteDB');
+			$('#list').empty();
+		}
+	});
+
+	socket.on('msg open', function(data) {
+		if(data.length == 0) {
+			console.log("nothing to load.");
+			return;
+		} else {
+			console.log(data);
+			$('#list').empty();
+			$.each(data, function(key, value) {
+				console.log("hoge");
+				$('#list').append($('<dt>@' + value.name + ': ' + value.date + '</dt><dd>' + value.markdown + '</dd>'));
+                // scroll to bottom
+                //window.scrollTo(0,document.body.scrollHeight);
+			});
+		}
+	});			  
+
 	socket.on('msg push', function(data) {
 		console.log(data);
 		var date = new Date();
-		$('#list').prepend($('<dt>@' + data.name + ': ' + date + '</dt><dd>' + data.markdown + '</dd>'));
+		//$('#list').prepend($('<dt>@' + data.name + ': ' + date + '</dt><dd>' + data.markdown + '</dd>'));
+        $('#list').append($('<dt>@' + data.name + ': ' + date + '</dt><dd>' + data.markdown + '</dd>'));
+        // scroll to bottom
+        window.scrollTo(0,document.body.scrollHeight);
 	});
 
-	socket.on('msg updateDB', function(data) {
-		// TODO: mongoDBにつっこむ予定
-		console.log(data);
-	});
 });

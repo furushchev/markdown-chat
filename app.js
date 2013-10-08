@@ -8,10 +8,11 @@ var express = require('express')
   , user = require('./routes/user')
   , http = require('http')
   , https = require('https')
-  , path = require('path');
+  , mongoose = require('mongoose')
+  , path = require('path')
+  , $ = require("cheerio");
 
 var app = express();
-
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
@@ -20,9 +21,11 @@ app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
+app.use(express.cookieParser());
+app.use(express.session({ secret: 'markdown-chat-0E46CB44-0B66-4B74-AD6B-8D467D51FBC8' }));
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'bower_components')));
+//app.use(express.static(path.join(__dirname, 'bower_components')));
 
 // development only
 if ('development' == app.get('env')) {
@@ -34,8 +37,20 @@ app.get('/', routes.index);
 
 var server = http.createServer(app)
 
+// setup database (mongoDB)
+var Schema = mongoose.Schema;
+var UserSchema = new Schema({
+	name: String,
+	date: Date,
+	message: String,
+	markdown: String
+});
+mongoose.model('User', UserSchema);
+mongoose.connect('mongodb://localhost/markdown_chat');
+var User = mongoose.model('User');
+
+
 // settings for socket.io
-//var io = require('socket.io').listen(app);
 var io = require('socket.io').listen(server);
 
 io.configure(function() {
@@ -79,14 +94,47 @@ server.listen(app.get('port'), function(){
 });
 
 io.sockets.on('connection', function(socket) {
+
+	// 初回接続時の履歴取得
+	socket.on('msg update', function() {
+		User.find(function(err, docs) {
+			socket.emit('msg open', docs);
+		});
+	});
+
+	// when received message
 	socket.on('msg send', function(data) {
 		request(data.msg, function(err, md) {
+            // rewrite <a> tag
+            var $md = $(md);
+            $md.find("a").attr("target", "_blank");
+            md = $("<div>").append($md.clone()).html();
 			console.log('md: ' + md);
 			data['markdown'] = md;
 			socket.emit('msg push', data);
 			socket.broadcast.emit('msg push', data);
+
+			// register to database
+			var user = new User();
+			user.name = data.name;
+			user.date = new Date();
+			user.message = data.message;
+			user.markdown = md;
+			user.save(function(e) {
+				if (e) {
+					console.log("error: register to database: " + e.message);
+				}
+			});
 		});
 	});
+
+	// delete from database
+	socket.on('deleteDB', function() {
+		socket.emit('db drop');
+		socket.broadcast.emit('db drop');
+		User.find().remove();
+	});
+
 	socket.on('disconnect', function() {
 		console.log('disconnected.');
 	});
