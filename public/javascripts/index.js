@@ -1,5 +1,4 @@
 $(function(){
-	console.log($('textarea'));
 	// need jquery.taboverride
 	$('textarea').tabOverride(true);
 
