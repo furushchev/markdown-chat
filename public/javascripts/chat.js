@@ -35,7 +35,9 @@ $(function() {
 			$('#list').empty();
 			$.each(data, function(key, value) {
 				console.log("hoge");
-				$('#list').prepend($('<dt>@' + value.name + ': ' + value.date + '</dt><dd>' + value.markdown + '</dd>'));
+				$('#list').append($('<dt>@' + value.name + ': ' + value.date + '</dt><dd>' + value.markdown + '</dd>'));
+                // scroll to bottom
+                //window.scrollTo(0,document.body.scrollHeight);
 			});
 		}
 	});			  
@@ -43,7 +45,10 @@ $(function() {
 	socket.on('msg push', function(data) {
 		console.log(data);
 		var date = new Date();
-		$('#list').prepend($('<dt>@' + data.name + ': ' + date + '</dt><dd>' + data.markdown + '</dd>'));
+		//$('#list').prepend($('<dt>@' + data.name + ': ' + date + '</dt><dd>' + data.markdown + '</dd>'));
+        $('#list').append($('<dt>@' + data.name + ': ' + date + '</dt><dd>' + data.markdown + '</dd>'));
+        // scroll to bottom
+        window.scrollTo(0,document.body.scrollHeight);
 	});
 
 });
