@@ -30,7 +30,7 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/users', user.list);
+//app.get('/users', user.list);
 
 var server = http.createServer(app)
 
@@ -69,13 +69,11 @@ function request(msg, cb) {
 }
 
 server.listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+  console.log('express server listening on port ' + app.get('port'));
 });
 
 io.sockets.on('connection', function(socket) {
 	socket.on('msg send', function(msg) {
-//		socket.emit('msg push', msg);
-//		socket.broadcast.emit('msg push', msg);
 		request(msg, function(err, md) {
 			console.log('md: ' + md);
 			socket.emit('msg push', md);

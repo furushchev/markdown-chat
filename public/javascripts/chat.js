@@ -18,6 +18,7 @@ $(function() {
 	});
 
 	socket.on('msg updateDB', function(msg) {
+		// TODO: mongoDBにつっこむ予定
 		console.log(msg);
 	});
 });
