@@ -1,5 +1,5 @@
 $(function() {
-	socket = io.connect('http://localhost');
+	socket = io.connect(location.href);
 	socket.on('connect', function() {
 		socket.emit('msg update');
 		console.log('connected.');

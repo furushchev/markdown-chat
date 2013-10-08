@@ -9,10 +9,10 @@ var express = require('express')
   , http = require('http')
   , https = require('https')
   , mongoose = require('mongoose')
-  , path = require('path');
+  , path = require('path')
+  , $ = require("cheerio");
 
 var app = express();
-
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
@@ -25,7 +25,7 @@ app.use(express.cookieParser());
 app.use(express.session({ secret: 'markdown-chat-0E46CB44-0B66-4B74-AD6B-8D467D51FBC8' }));
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'bower_components')));
+//app.use(express.static(path.join(__dirname, 'bower_components')));
 
 // development only
 if ('development' == app.get('env')) {
@@ -52,6 +52,12 @@ var User = mongoose.model('User');
 
 // settings for socket.io
 var io = require('socket.io').listen(server);
+
+io.configure(function() {
+    io.set("transports", ["xhr-polling"]); 
+    io.set("polling duration", 10); 
+
+});
 
 function request(msg, cb) {
 	var settings = {
@@ -99,6 +105,10 @@ io.sockets.on('connection', function(socket) {
 	// when received message
 	socket.on('msg send', function(data) {
 		request(data.msg, function(err, md) {
+            // rewrite <a> tag
+            var $md = $(md);
+            $md.find("a").attr("target", "_blank");
+            md = $("<div>").append($md.clone()).html();
 			console.log('md: ' + md);
 			data['markdown'] = md;
 			socket.emit('msg push', data);

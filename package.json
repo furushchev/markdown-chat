@@ -4,12 +4,18 @@
   "private": true,
   "scripts": {
     "start": "node app.js"
-  },
-  "dependencies": {
+  }
+  , "engines": {
+      "node": "0.10.3",
+      "npm": "1.x"
+  }
+  ,"dependencies": {
     "express": "3.3.3",
+    "mongoose": "3.6.20",
     "ejs": "*",
 	"socket.io": "*",
 	"bower": "*",
-	"mongoose": "*"
+	"mongoose": "*",
+    "cheerio": "*"
   }
 }
