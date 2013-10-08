@@ -73,11 +73,12 @@ server.listen(app.get('port'), function(){
 });
 
 io.sockets.on('connection', function(socket) {
-	socket.on('msg send', function(msg) {
-		request(msg, function(err, md) {
+	socket.on('msg send', function(data) {
+		request(data.msg, function(err, md) {
 			console.log('md: ' + md);
-			socket.emit('msg push', md);
-			socket.broadcast.emit('msg push', md);
+			data['markdown'] = md;
+			socket.emit('msg push', data);
+			socket.broadcast.emit('msg push', data);
 		});
 	});
 	socket.on('disconnect', function() {

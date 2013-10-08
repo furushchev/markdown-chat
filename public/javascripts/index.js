@@ -12,9 +12,15 @@ $(function(){
 			}
 			e.returnValue = false;
 
+			var name = $('#namae');
 			var message = $('#message');
-			console.log(message);
-			socket.emit('msg send', message.val());
+			console.log(name + " " + message);
+			var sendData = {
+				"name": name.val(),
+				"msg": message.val()
+			};
+			socket.emit('msg send', sendData);
+
 			message.val('');
 		}
 	});
