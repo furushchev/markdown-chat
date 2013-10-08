@@ -82,7 +82,9 @@ io.sockets.on('connection', function(socket) {
 	socket.on('msg send', function(data) {
 		request(data.msg, function(err, md) {
             // rewrite <a> tag
-            md = $("<div>").append($(md).find("a").attr("target", "_blank").clone()).html();
+            var $md = $(md);
+            $md.find("a").attr("target", "_blank");
+            md = $("<div>").append($md.clone()).html();
 			console.log('md: ' + md);
 			data['markdown'] = md;
 			socket.emit('msg push', data);
