@@ -8,10 +8,10 @@ var express = require('express')
   , user = require('./routes/user')
   , http = require('http')
   , https = require('https')
-  , path = require('path');
+  , path = require('path')
+  , $ = require("cheerio");
 
 var app = express();
-
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
@@ -81,6 +81,8 @@ server.listen(app.get('port'), function(){
 io.sockets.on('connection', function(socket) {
 	socket.on('msg send', function(data) {
 		request(data.msg, function(err, md) {
+            // rewrite <a> tag
+            md = $("<div>").append($(md).find("a").attr("target", "_blank").clone()).html();
 			console.log('md: ' + md);
 			data['markdown'] = md;
 			socket.emit('msg push', data);
