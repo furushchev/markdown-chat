@@ -1,5 +1,5 @@
 $(function() {
-	var socket = io.connect('http://localhost');
+	socket = io.connect('http://localhost');
 	socket.on('connect', function() {
 		console.log('connected.');
 	});
@@ -8,6 +8,7 @@ $(function() {
 		var message = $('#message');
 		console.log(message);
 		socket.emit('msg send', message.val());
+		message.val('');
 	});
 
 	socket.on('msg push', function(msg) {
