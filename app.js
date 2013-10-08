@@ -48,7 +48,7 @@ var UserSchema = new Schema({
 
 mongoose.model('User', UserSchema);
 if (process.env.MONGOLAB_URI) {
-    mongoose.connect('process.env.MONGOLAB_URI');
+    mongoose.connect(process.env.MONGOLAB_URI);
 }
 else {
     mongoose.connect('mongodb://localhost/markdown_chat');
