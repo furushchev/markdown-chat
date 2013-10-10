@@ -101,7 +101,7 @@ server.listen(app.get('port'), function(){
   console.log('express server listening on port ' + app.get('port'));
 });
 
-var chat_ejs = fs.readFileSync("./views/chat.ejs", "utf8");
+var chat_ejs = fs.readFileSync("./views/chat.ejs", "utf8"); // node-dev cannot ditect the change of chat.ejs
 
 function renderData(values) {
     return ejs.render(chat_ejs, values);
@@ -125,13 +125,15 @@ io.sockets.on('connection', function(socket) {
             md = $("<div>").append($md.clone()).html();
 			console.log('md: ' + md);
 			data['markdown'] = md;
-			socket.emit('msg push', data);
+            var now = new Date(); // now
+            data["date"] = now;
+			socket.emit('msg push', renderData(data));
 			socket.broadcast.emit('msg push', data);
 
 			// register to database
 			var user = new User();
 			user.name = data.name;
-			user.date = new Date();
+			user.date = now;
 			user.message = data.message;
 			user.markdown = md;
 			user.save(function(e) {

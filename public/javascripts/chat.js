@@ -34,7 +34,6 @@ $(function() {
 		} else {
 			$('#chats').empty(); // ensure to clear #chats
 			$.each(data, function(key, value) {
-				//$('#chats').append($('<dt>@' + value.name + ': ' + value.date + '</dt><dd>' + value.markdown + '</dd>'));
                 $('#chats').append(value);
                 // scroll to bottom
                 //window.scrollTo(0,document.body.scrollHeight);
@@ -45,8 +44,7 @@ $(function() {
 	socket.on('msg push', function(data) {
 		console.log(data);
 		var date = new Date();
-		//$('#chats').prepend($('<dt>@' + data.name + ': ' + date + '</dt><dd>' + data.markdown + '</dd>'));
-        $('#chats').append($('<dt>@' + data.name + ': ' + date + '</dt><dd>' + data.markdown + '</dd>'));
+        $('#chats').append(data);
         // scroll to bottom
         window.scrollTo(0,document.body.scrollHeight);
 	});
