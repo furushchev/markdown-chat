@@ -17,5 +17,8 @@
 	"bower": "*",
 	"mongoose": "*",
     "cheerio": "*"
+  },
+  "scripts": {
+      "postinstall": "./node_modules/bower/bin/bower install"
   }
 }
