@@ -10,6 +10,8 @@ var express = require('express')
   , https = require('https')
   , mongoose = require('mongoose')
   , path = require('path')
+  , ejs = require("ejs")
+  , fs = require("fs")
   , $ = require("cheerio");
 
 var app = express();
@@ -99,12 +101,18 @@ server.listen(app.get('port'), function(){
   console.log('express server listening on port ' + app.get('port'));
 });
 
+var chat_ejs = fs.readFileSync("./views/chat.ejs", "utf8");
+
+function renderData(values) {
+    return ejs.render(chat_ejs, values);
+}
+
 io.sockets.on('connection', function(socket) {
 
 	// 初回接続時の履歴取得
 	socket.on('msg update', function() {
 		User.find(function(err, docs) {
-			socket.emit('msg open', docs);
+			socket.emit('msg open', docs.map(renderData));
 		});
 	});
 

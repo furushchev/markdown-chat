@@ -1,5 +1,6 @@
 $(function() {
 	socket = io.connect(location.href);
+
 	socket.on('connect', function() {
 		socket.emit('msg update');
 		console.log('connected.');
@@ -22,7 +23,7 @@ $(function() {
 	$('#delete').click(function(){
 		if(window.confirm("Are you sure?") == true) {
 			socket.emit('deleteDB');
-			$('#list').empty();
+			$('#chats').empty();
 		}
 	});
 
@@ -31,11 +32,10 @@ $(function() {
 			console.log("nothing to load.");
 			return;
 		} else {
-			console.log(data);
-			$('#list').empty();
+			$('#chats').empty(); // ensure to clear #chats
 			$.each(data, function(key, value) {
-				console.log("hoge");
-				$('#list').append($('<dt>@' + value.name + ': ' + value.date + '</dt><dd>' + value.markdown + '</dd>'));
+				//$('#chats').append($('<dt>@' + value.name + ': ' + value.date + '</dt><dd>' + value.markdown + '</dd>'));
+                $('#chats').append(value);
                 // scroll to bottom
                 //window.scrollTo(0,document.body.scrollHeight);
 			});
@@ -45,8 +45,8 @@ $(function() {
 	socket.on('msg push', function(data) {
 		console.log(data);
 		var date = new Date();
-		//$('#list').prepend($('<dt>@' + data.name + ': ' + date + '</dt><dd>' + data.markdown + '</dd>'));
-        $('#list').append($('<dt>@' + data.name + ': ' + date + '</dt><dd>' + data.markdown + '</dd>'));
+		//$('#chats').prepend($('<dt>@' + data.name + ': ' + date + '</dt><dd>' + data.markdown + '</dd>'));
+        $('#chats').append($('<dt>@' + data.name + ': ' + date + '</dt><dd>' + data.markdown + '</dd>'));
         // scroll to bottom
         window.scrollTo(0,document.body.scrollHeight);
 	});
