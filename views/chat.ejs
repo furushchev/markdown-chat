@@ -1,14 +1,24 @@
 <!-- each chat -->
-<div class="say">
-  <div class="row">
-    <div class="author col-md-8">
-      <%= name %>
+<div class="say-wrapper">
+  <div class="say">
+    <div class="say-header">
+    <div class="row">
+      <div class="author col-md-8">
+        @<%= name || "unknown"%>
+      </div>
+      <div class="date col-md-4">
+        <%= date %>
+      </div>
+      </div>
     </div>
-    <div class="date col-md-4">
-      <%= date %>
+    <div class="say-content">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="markdown">
+            <%- markdown %>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="markdown">
-    <%- markdown %>
   </div>
 </div>
