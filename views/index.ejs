@@ -17,15 +17,15 @@
       <div id="chats">
         
       </div>
-	  <form class="form-inline">
-	    <div class="form-group">
-		  <p>Name: <input type="text" name="namae" id="namae" 
-						  class="form-control col-xs-4"
-	  		 			  size="20" maxlength="20"></p>
-	    </div>
+	  <form class="form-inline chat-input-form">
+        <div class="input-group chat-name-input-group">
+          <span class="input-group-addon chat-name-input-preaddon">@</span>
+          <input type="text" class="form-control chat-name-input" placeholder="Username"
+                 name="namae" id="namae">
+        </div>
 	    <textarea cols="100", rows="5"
 				  name="message" id="message"
-				  class="form-control"
+				  class="form-control chat-input-markdown"
 				  placeholder="Input text with markdown syntax!"></textarea>
 	  </form>
 	  <div style="margin-top: 10px">
