@@ -28,9 +28,25 @@
 				  class="form-control chat-input-markdown"
 				  placeholder="Input text with markdown syntax!"></textarea>
 	  </form>
-	  <div style="margin-top: 10px">
-	    <button id="btn" class="btn btn-default btn-sm">送信</button>
-	    <button id="delete" class="btn btn-danger btn-sm">履歴削除</button>
+	  <div class="chat-input-button-area">
+        <div class="row">
+          <div class="send-button-area">
+            <div class="col-md-2 col-md-offset-10">
+	          <button id="btn" class="btn btn-primary btn-sm pull-right">送信</button>
+            </div>
+          </div>
+        </div>
+        <div class="chat-input-button-area-footnote">
+          <div class="row">
+            <div class="col-md-4 col-md-offset-8">
+              <p class="chat-input-button-area-footnote-text">
+                Shift + Enterで送信出来ます
+              </p>
+            </div>
+            </div>
+          </div>
+        </div>
+	    <!-- <button id="delete" class="btn btn-danger btn-sm">履歴削除</button> -->
 	  </div>
     </div>
 	<script type="text/javascript"

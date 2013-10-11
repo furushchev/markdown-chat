@@ -35,8 +35,6 @@ $(function() {
 			$('#chats').empty(); // ensure to clear #chats
 			$.each(data, function(key, value) {
                 $('#chats').append(value);
-                // scroll to bottom
-                //window.scrollTo(0,document.body.scrollHeight);
 			});
 		}
 	});			  
