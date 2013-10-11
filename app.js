@@ -14,6 +14,9 @@ var express = require('express')
   , fs = require("fs")
   , $ = require("cheerio");
 
+// load local libraries
+require("./model")
+
 var app = express();
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -39,16 +42,7 @@ app.get('/', routes.index);
 
 var server = http.createServer(app)
 
-// setup database (mongoDB)
-var Schema = mongoose.Schema;
-var UserSchema = new Schema({
-	name: String,
-	date: Date,
-	message: String,
-	markdown: String
-});
 
-mongoose.model('User', UserSchema);
 if (process.env.MONGOLAB_URI) {
     mongoose.connect(process.env.MONGOLAB_URI);
 }
