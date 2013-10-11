@@ -16,7 +16,8 @@
 	"socket.io": "*",
 	"bower": "*",
 	"mongoose": "*",
-    "cheerio": "*"
+    "cheerio": "*",
+    "q": "*"
   },
   "scripts": {
       "postinstall": "./node_modules/bower/bin/bower install"
