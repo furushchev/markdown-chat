@@ -3,6 +3,8 @@
 var mongoose = require("mongoose")
   , https = require('https')
   , Q = require("q")
+  , $ = require("cheerio")
+  , ejs = require("ejs")
   , fs = require("fs");
 
 var Schema = mongoose.Schema;
@@ -46,7 +48,23 @@ Say.renderMarkdownByGithub = function(input_md) {
     return deffered.promise;
 }
 
+Say.forceToUseBlank = function(html) {
+    // force to use _target="blank" attributes in a tags
+    var $md = $(html);
+    $md.find("a").attr("target", "_blank");
+    return $("<div>").append($md.clone()).html();
+};
+
 var chat_ejs = fs.readFileSync("views/chat.ejs", "utf8"); // node-dev cannot ditect the change of chat.ejs
+
+Say.prototype.renderWithEJS = function() {
+    try {
+        var self = this;
+        return ejs.render(chat_ejs, self);
+    } catch(e) {
+        console.log(e);
+    }
+}
 
 Say.prototype.renderMarkdown = function() {
     // rendering markdown into html
@@ -56,8 +74,8 @@ Say.prototype.renderMarkdown = function() {
     // this is asynchronous method, so returns deffered object.
     var self = this;
     if (self.markdown) {
-        var deffered = Q.deffered();
-        var rendered_html = ejs.render(chat_ejs, self);
+        var deffered = Q.defer();
+        var rendered_html = self.renderWithEJS();
         // update the markdown property
         deffered.resolve(rendered_html); // SetTimeout required?
         return deffered.promise;
@@ -65,17 +83,15 @@ Say.prototype.renderMarkdown = function() {
     else {
         return Say.renderMarkdownByGithub(self.raw_markdown)
             .then(function(githubhtml) {
-                var deffered = Q.deffered();
-                self.markdown = githubhtml;
-                self.save(function(e) {
-                    if (e) {
-                        deffered.reject(e);
-                    }
-                    else {
-                        deffered.resolve(githubhtml);
-                    }
-                    
-                });
+                var deffered = Q.defer();
+                self.markdown = Say.forceToUseBlank(githubhtml);
+                deffered.resolve(githubhtml);
+                return deffered.promise;
+            })
+            .then(function(githubhtml) {
+                var deffered = Q.defer();
+                var rendered_html = self.renderWithEJS();
+                deffered.resolve(rendered_html); // SetTimeout required?
                 return deffered.promise;
             });
     }
