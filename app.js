@@ -128,6 +128,7 @@ io.sockets.on('connection', function(socket) {
 			var say = new Say();
 			say.name = data.name;
 			say.date = now;
+            say.raw_markwodn = data.msg;
 			say.message = data.message;
 			say.markdown = md;
 			say.save(function(e) {
