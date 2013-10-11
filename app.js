@@ -14,6 +14,9 @@ var express = require('express')
   , fs = require("fs")
   , $ = require("cheerio");
 
+// load local libraries
+require("./model")
+
 var app = express();
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -39,23 +42,14 @@ app.get('/', routes.index);
 
 var server = http.createServer(app)
 
-// setup database (mongoDB)
-var Schema = mongoose.Schema;
-var UserSchema = new Schema({
-	name: String,
-	date: Date,
-	message: String,
-	markdown: String
-});
 
-mongoose.model('User', UserSchema);
 if (process.env.MONGOLAB_URI) {
     mongoose.connect(process.env.MONGOLAB_URI);
 }
 else {
     mongoose.connect('mongodb://localhost/markdown_chat');
 }
-var User = mongoose.model('User');
+var Say = mongoose.model('Say');
 
 
 // settings for socket.io
@@ -111,7 +105,7 @@ io.sockets.on('connection', function(socket) {
 
 	// 初回接続時の履歴取得
 	socket.on('msg update', function() {
-		User.find(function(err, docs) {
+		Say.find(function(err, docs) {
 			socket.emit('msg open', docs.map(renderData));
 		});
 	});
@@ -131,12 +125,12 @@ io.sockets.on('connection', function(socket) {
 			socket.broadcast.emit('msg push', data);
 
 			// register to database
-			var user = new User();
-			user.name = data.name;
-			user.date = now;
-			user.message = data.message;
-			user.markdown = md;
-			user.save(function(e) {
+			var say = new Say();
+			say.name = data.name;
+			say.date = now;
+			say.message = data.message;
+			say.markdown = md;
+			say.save(function(e) {
 				if (e) {
 					console.log("error: register to database: " + e.message);
 				}
@@ -148,7 +142,7 @@ io.sockets.on('connection', function(socket) {
 	socket.on('deleteDB', function() {
 		socket.emit('db drop');
 		socket.broadcast.emit('db drop');
-		User.find().remove();
+		Say.find().remove();
 	});
 
 	socket.on('disconnect', function() {
