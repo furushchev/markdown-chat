@@ -3,12 +3,12 @@
 var mongoose = require("mongoose");
 
 var Schema = mongoose.Schema;
-var UserSchema = new Schema({
+var SaySchema = new Schema({
 	name: String,
 	date: Date,
 	message: String,
 	markdown: String
 });
 
-mongoose.model('User', UserSchema);
-var User = mongoose.model('User');
+mongoose.model('Say', SaySchema);
+var Say = mongoose.model('Say');
