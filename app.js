@@ -30,7 +30,6 @@ app.use(express.cookieParser());
 app.use(express.session({ secret: 'markdown-chat-0E46CB44-0B66-4B74-AD6B-8D467D51FBC8' }));
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
-//app.use(express.static(path.join(__dirname, 'bower_components')));
 
 // development only
 if ('development' == app.get('env')) {
