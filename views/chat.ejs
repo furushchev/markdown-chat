@@ -1,5 +1,5 @@
 <!-- each chat -->
-<div class="say-wrapper">
+<div class="say-wrapper" id="say_<%= _id %>">
   <div class="say">
     <div class="say-header">
     <div class="row">
@@ -8,7 +8,10 @@
       </div>
       <div class="date col-md-6">
         <div class="pull-right">
-          <%= date %>
+          <a class="date-sentence" href="#" data-toggle="tooltip"
+             title="<%= date %>">
+            <%= date %>
+          </a>
         </div>
       </div>
       </div>
