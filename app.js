@@ -89,14 +89,16 @@ io.sockets.on('connection', function(socket) {
 
 	// 初回接続時の履歴取得
 	socket.on('msg update', function() {
-		Say.find(function(err, docs) {
-			socket.emit('msg open', docs.map(function(doc) {
-                return {
-                    html: doc.renderWithEJS(),
-                    date: doc.date,
-                    _id: doc._id
-                };
-            }));
+		Say.find()
+       .limit(2)
+       .exec(function(err, docs) {
+			     socket.emit('msg open', docs.map(function(doc) {
+               return {
+                   html: doc.renderWithEJS(),
+                   date: doc.date,
+                   _id: doc._id
+               };
+           }));
 		});
 	});
 
