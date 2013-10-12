@@ -1,14 +1,14 @@
 $(function() {
-    function scrollToBottomAnimated() {
-        $("html,body").animate({scrollTop: document.body.scrollHeight}, "slow");
-    };
-
-    // check the cookie to recall name
-    if ($.cookie("name")) {
-        $('input[name="namae"]').val($.cookie("name"));
-    }
+  function scrollToBottomAnimated() {
+    $("html,body").animate({scrollTop: document.body.scrollHeight}, "slow");
+  };
+  
+  // check the cookie to recall name
+  if ($.cookie("name")) {
+    $('input[name="namae"]').val($.cookie("name"));
+  }
     
-	socket = io.connect(location.href);
+	var socket = io.connect(location.href);
 
 	socket.on('connect', function() {
 		socket.emit('msg update');
@@ -47,13 +47,13 @@ $(function() {
 	});			  
 
 	socket.on('msg push', function(data) {
-        var $data = $(data);
-        $('#chats').append($data);
-        // scroll to bottom
-        $data.ready(function() {
-            console.log("hoge");
-            scrollToBottomAnimated();
-        });
+    var $data = $(data);
+    $('#chats').append($data);
+    // scroll to bottom
+    $data.ready(function() {
+      console.log("hoge");
+      scrollToBottomAnimated();
+    });
 	});
 
 });
