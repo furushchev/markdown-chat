@@ -1,4 +1,8 @@
 $(function() {
+    function scrollToBottomAnimated() {
+        $("html,body").animate({scrollTop: document.body.scrollHeight}, "slow");
+    };
+    
 	socket = io.connect(location.href);
 
 	socket.on('connect', function() {
@@ -9,15 +13,12 @@ $(function() {
 	$('#btn').click(function() {
 		var name = $('#namae');
 		var message = $('#message');
-		console.log(name.val());
-		console.log(message.val());
 		var sendData = {
 			"name": name.val(),
 			"msg": message.val(),
 		};
-//		socket.emit('msg send', message.val());
 		socket.emit('msg send', sendData);
-		message.val('');
+		message.val('');        // clear message
 	});
 
 	$('#delete').click(function(){
@@ -40,11 +41,13 @@ $(function() {
 	});			  
 
 	socket.on('msg push', function(data) {
-		console.log(data);
-		var date = new Date();
-        $('#chats').append(data);
+        var $data = $(data);
+        $('#chats').append($data);
         // scroll to bottom
-        window.scrollTo(0,document.body.scrollHeight);
+        $data.ready(function() {
+            console.log("hoge");
+            scrollToBottomAnimated();
+        });
 	});
 
 });
