@@ -17,7 +17,8 @@
 	"bower": "*",
 	"mongoose": "*",
     "cheerio": "*",
-    "q": "*"
+    "q": "*",
+      "lodash": "*"
   },
   "scripts": {
       "postinstall": "./node_modules/bower/bin/bower install"
