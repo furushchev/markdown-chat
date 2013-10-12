@@ -40,7 +40,7 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 //app.get('/users', user.list);
 
-var server = http.createServer(app)
+var server = http.createServer(app);
 
 
 if (process.env.MONGOLAB_URI) {
