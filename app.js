@@ -37,8 +37,31 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/', routes.index);
-//app.get('/users', user.list);
+// routing
+var routes = require("./routes");
+routes.routes.forEach(function(r) {
+    if (r.get_url && r.get) { 
+        if (r.get_url instanceof Array) {
+            r.get_url.forEach(function(u) {
+                app.get(u, r.get);
+            });
+        }
+        else {
+            app.get(r.get_url, r.get);
+        }
+    }
+    if (r.post_url && r.post) {
+        if (r.post_url instanceof Array) {
+            r.post_url.forEach(function(u) {
+                app.post(u, r.post);
+            });
+        }
+        else {
+            app.post(r.post_url, r.post);
+        }
+    }
+});
+
 
 var server = http.createServer(app);
 

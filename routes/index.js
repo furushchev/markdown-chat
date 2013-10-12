@@ -1,8 +1,6 @@
+var _ = require("lodash");
+var files = ["_index"];
 
-/*
- * GET home page.
- */
-
-exports.index = function(req, res){
-  res.render('index', { title: 'Markdown Chat' });
-};
+exports.routes = _.map(files, function(f) {
+    return require("./" + f);
+});
