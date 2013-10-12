@@ -15,7 +15,7 @@ var express = require('express')
   , $ = require("cheerio");
 
 // load local libraries
-require("./model")
+require("./model");
 
 var app = express();
 // all environments
