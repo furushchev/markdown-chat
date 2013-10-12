@@ -4,6 +4,7 @@
 	"dependencies": {
 		"jquery.taboverride": "*",
         "ejs": "*",
-        "less": "*"
+        "less": "*",
+        "jquery.cookie": "*"
 	}
 }

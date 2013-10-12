@@ -2,6 +2,11 @@ $(function() {
     function scrollToBottomAnimated() {
         $("html,body").animate({scrollTop: document.body.scrollHeight}, "slow");
     };
+
+    // check the cookie to recall name
+    if ($.cookie("name")) {
+        $('input[name="namae"]').val($.cookie("name"));
+    }
     
 	socket = io.connect(location.href);
 
@@ -12,6 +17,7 @@ $(function() {
 
 	$('#btn').click(function() {
 		var name = $('#namae');
+        $.cookie("name", name.val());
 		var message = $('#message');
 		var sendData = {
 			"name": name.val(),
