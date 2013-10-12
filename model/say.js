@@ -57,9 +57,19 @@ Say.forceToUseBlank = function(html) {
 
 var chat_ejs = fs.readFileSync("views/chat.ejs", "utf8"); // node-dev cannot ditect the change of chat.ejs
 
+Say.prototype.readableDateStr = function() {
+    var self = this;
+    var date_str = self.date.getFullYear() + "/"
+            + (self.date.getMonth() + 1) + "/"
+            + (self.date.getDate()) + " "
+            + (self.date.getHours()) + ":" + (self.date.getMinutes());
+    return date_str;
+}
+
 Say.prototype.renderWithEJS = function() {
     try {
         var self = this;
+        self.date_str = self.readableDateStr();
         return ejs.render(chat_ejs, self);
     } catch(e) {
         console.log(e);

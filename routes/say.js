@@ -17,17 +17,16 @@ exports.get = function(req, res) {
         else {
             say.renderMarkdown()
                 .then(function(rendered_html) {
+                    
                     res.render("say", {
-                        title: "@" + say.name + " on " + (say.date),
+                        title: "@" + say.name + " on " + (say.date_str),
                         date: say.date,
                         html: rendered_html,
+                        date_str: say.readableDateStr(),
                         _id: say._id,
                         raw_markdown: (say.raw_markdown || "").replace(/(^\s+)|(\s+$)/g, "")
                     });
                 });
-            //res.send(say);
         }
-        
-        
     });
 };

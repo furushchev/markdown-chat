@@ -40,8 +40,12 @@ Say.prototype.updateDateFormat = function() {
 
 Say.prototype.appendTo = function($content) {
     var $data = $(this.html);
+    var date_str = this.date.getFullYear() + "/"
+        + (this.date.getMonth() + 1) + "/"
+        + (this.date.getDate()) + " "
+        + (this.date.getHours()) + ":" + this.date.getMinutes();
     $data.find(".date-sentence")
-        .attr("title", this.date)
+        .attr("title", date_str)
         .tooltip();
     $content.append($data);
     this.updateDateFormat();
