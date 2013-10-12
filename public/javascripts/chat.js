@@ -8,7 +8,7 @@ $(function() {
     $('input[name="namae"]').val($.cookie("name"));
   }
     
-	var socket = io.connect(location.href);
+	socket = io.connect(location.href);
 
 	socket.on('connect', function() {
 		socket.emit('msg update');
@@ -17,7 +17,7 @@ $(function() {
 
 	$('#btn').click(function() {
 		var name = $('#namae');
-        $.cookie("name", name.val());
+    $.cookie("name", name.val());
 		var message = $('#message');
 		var sendData = {
 			"name": name.val(),
@@ -41,17 +41,16 @@ $(function() {
 		} else {
 			$('#chats').empty(); // ensure to clear #chats
 			$.each(data, function(key, value) {
-                $('#chats').append(value);
+                $('#chats').append(value.html);
 			});
 		}
 	});			  
 
 	socket.on('msg push', function(data) {
-    var $data = $(data);
+    var $data = $(data.html);
     $('#chats').append($data);
     // scroll to bottom
     $data.ready(function() {
-      console.log("hoge");
       scrollToBottomAnimated();
     });
 	});

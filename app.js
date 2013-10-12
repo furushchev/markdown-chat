@@ -101,7 +101,9 @@ io.sockets.on('connection', function(socket) {
 	socket.on('msg update', function() {
 		Say.find(function(err, docs) {
 			socket.emit('msg open', docs.map(function(doc) {
-                return doc.renderWithEJS();
+                return {
+                  html: doc.renderWithEJS()
+                };
             }));
 		});
 	});
@@ -118,10 +120,12 @@ io.sockets.on('connection', function(socket) {
             });
             say.renderMarkdown()
                 .then(function(rendered_html) {
-                    socket.emit('msg push', rendered_html);
+                    socket.emit('msg push', {html: rendered_html});
                     data['markdown'] = rendered_html;
                     data["date"] = now;
-                    socket.broadcast.emit('msg push', data);
+                    socket.broadcast.emit('msg push', {
+                      html: rendered_html
+                    });
                 }, function(err) {
                 });
 		 });
