@@ -14,9 +14,6 @@ var express = require('express')
   , fs = require("fs")
   , $ = require("cheerio");
 
-// load local libraries
-require("./model");
-
 var app = express();
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -36,10 +33,23 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
+var server = http.createServer(app);
+
+
+if (process.env.MONGOLAB_URI) {
+    mongoose.connect(process.env.MONGOLAB_URI);
+}
+else {
+    mongoose.connect('mongodb://localhost/markdown_chat');
+}
+
+// load local libraries
+require("./model");
+
 // routing
 var routes = require("./routes");
 routes.routes.forEach(function(r) {
-    if (r.get_url && r.get) { 
+    if (r.get_url && r.get) {
         if (r.get_url instanceof Array) {
             r.get_url.forEach(function(u) {
                 app.get(u, r.get);
@@ -61,19 +71,7 @@ routes.routes.forEach(function(r) {
     }
 });
 
-
-var server = http.createServer(app);
-
-
-if (process.env.MONGOLAB_URI) {
-    mongoose.connect(process.env.MONGOLAB_URI);
-}
-else {
-    mongoose.connect('mongodb://localhost/markdown_chat');
-}
 var Say = mongoose.model('Say');
-
-
 // settings for socket.io
 var io = require('socket.io').listen(server);
 
