@@ -44,7 +44,6 @@ $(function(){
 			$('#chats').empty(); // ensure to clear #chats
 			$.each(data, function(key, value) {
           var say = new Say(value);
-          all_says.push(say);
           say.appendTo($("#chats"));
           //$('#chats').append(value.html);
 			});
@@ -53,7 +52,6 @@ $(function(){
 
 	socket.on('msg push', function(data) {
       var say = new Say(data);
-      all_says.push(say);
       var $data = say.appendTo($("#chats"));
     // scroll to bottom
       $data.ready(function() {

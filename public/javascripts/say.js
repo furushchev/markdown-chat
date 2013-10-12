@@ -12,6 +12,8 @@ function Say(spec) {
     }
 };
 
+Say.all_says = [];
+
 Say.prototype.dateFormat = function() {
     var now = new Date();
     var diff = (now - this.date) / 1000.0; // diff in sec
@@ -43,15 +45,16 @@ Say.prototype.appendTo = function($content) {
         .tooltip();
     $content.append($data);
     this.updateDateFormat();
+    Say.all_says.push(this);
     return $data;
 }
 
-var all_says = [];
+
 
 // call updateDateFormat every 1 seconds
 Say.updateAllDateFormat = function() {
-    for (var i = 0; i < all_says.length; i++) {
-        all_says[i].updateDateFormat();
+    for (var i = 0; i < Say.all_says.length; i++) {
+        Say.all_says[i].updateDateFormat();
     }
     setTimeout(Say.updateAllDateFormat, 1000);
 };
