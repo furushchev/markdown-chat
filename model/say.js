@@ -86,6 +86,7 @@ Say.prototype.renderMarkdown = function() {
                 var deffered = Q.defer();
                 self.markdown = Say.forceToUseBlank(githubhtml);
                 deffered.resolve(githubhtml);
+                self.save();
                 return deffered.promise;
             })
             .then(function(githubhtml) {
