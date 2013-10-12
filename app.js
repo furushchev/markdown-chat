@@ -83,36 +83,6 @@ io.configure(function() {
 
 });
 
-function request(msg, cb) {
-	var settings = {
-		host: 'api.github.com',
-		path: '/markdown/raw',
-		method: 'POST',
-		headers: {
-			'Content-Type': 'text/plain'
-		}
-	};
-	
-	var req = https.request(settings, function(res) {
-		var response = [];
-		res.setEncoding('utf8');
-		res.on('data', function(chunk) {
-			console.log('received: ' + chunk);
-			response.push(chunk);
-		});
-		res.on('end', function() {
-			cb(null, response.join());
-		});
-	});
-	
-	req.on('error', function(e) {
-		cb('\033[31m' + e.message + '\033[0m');
-	});
-
-	req.write(msg);
-	req.end();
-}
-
 server.listen(app.get('port'), function(){
   console.log('express server listening on port ' + app.get('port'));
 });
@@ -134,29 +104,27 @@ io.sockets.on('connection', function(socket) {
 
 	// when received message
 	socket.on('msg send', function(data) {
-		request(data.msg, function(err, md) {
-        var now = new Date(); // now
-        var say = new Say({
-            name: data.name,
-            date: now,
-            raw_markdown: data.msg,
-            message: data.message
-        });
-        say.renderMarkdown()
-            .then(function(rendered_html) {
-                var send_data = {
-                    html: rendered_html,
-                    date: now,
-                    _id: say._id
-                };
-                socket.emit('msg push', send_data);
-                data['markdown'] = rendered_html;
-                data["date"] = now;
-                socket.broadcast.emit('msg push', send_data);
-            }, function(err) {
-            });
-    });
-	});
+      var now = new Date(); // now
+      var say = new Say({
+          name: data.name,
+          date: now,
+          raw_markdown: data.msg,
+          message: data.message
+      });
+      say.renderMarkdown()
+          .then(function(rendered_html) {
+              var send_data = {
+                  html: rendered_html,
+                  date: now,
+                  _id: say._id
+              };
+              socket.emit('msg push', send_data);
+              data['markdown'] = rendered_html;
+              data["date"] = now;
+              socket.broadcast.emit('msg push', send_data);
+          }, function(err) {
+          })
+  });
 
 	// delete from database
 	socket.on('deleteDB', function() {
