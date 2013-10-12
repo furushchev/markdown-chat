@@ -101,7 +101,11 @@ io.sockets.on('connection', function(socket) {
 	socket.on('msg update', function() {
 		Say.find(function(err, docs) {
 			socket.emit('msg open', docs.map(function(doc) {
-                return doc.renderWithEJS();
+                return {
+                    html: doc.renderWithEJS(),
+                    date: doc.date,
+                    _id: doc._id
+                };
             }));
 		});
 	});
@@ -109,22 +113,27 @@ io.sockets.on('connection', function(socket) {
 	// when received message
 	socket.on('msg send', function(data) {
 		request(data.msg, function(err, md) {
-            var now = new Date(); // now
-            var say = new Say({
-                name: data.name,
-                date: now,
-                raw_markdown: data.msg,
-                message: data.message
+        var now = new Date(); // now
+        var say = new Say({
+            name: data.name,
+            date: now,
+            raw_markdown: data.msg,
+            message: data.message
+        });
+        say.renderMarkdown()
+            .then(function(rendered_html) {
+                var send_data = {
+                    html: rendered_html,
+                    date: now,
+                    _id: say._id
+                };
+                socket.emit('msg push', send_data);
+                data['markdown'] = rendered_html;
+                data["date"] = now;
+                socket.broadcast.emit('msg push', send_data);
+            }, function(err) {
             });
-            say.renderMarkdown()
-                .then(function(rendered_html) {
-                    socket.emit('msg push', rendered_html);
-                    data['markdown'] = rendered_html;
-                    data["date"] = now;
-                    socket.broadcast.emit('msg push', data);
-                }, function(err) {
-                });
-		 });
+    });
 	});
 
 	// delete from database
