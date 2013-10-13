@@ -23,16 +23,18 @@ exports.get = function(req, res) {
                     .then(function(count) {
                         // resolve pager
                         var pager_length = config.PAGE_MAX;
-                        var page_count = count / pager_length;
+                        var page_count = Math.ceil(count / pager_length);
                         var min_index = page_id - pager_length > 0 ? page_id - pager_length: 0;
                         var max_index = page_id + pager_length < page_count ? page_id + pager_length: page_count - 1;
+                        console.log(min_index);
+                        console.log(max_index);
                         Q.allSettled(says.map(function(say) { return say.renderMarkdown(); }))
                             .then(function(says_html) {
                                 res.render("page", {
                                     says: says,
                                     says_html: says_html.map(function(v) { return v.value; }),
                                     title: config.TITLE,
-                                    count: page_count,
+                                    count: Math.ceil(page_count),
                                     index: page_id,
                                     min_index: min_index,
                                     max_index: max_index,
