@@ -17,13 +17,17 @@
             <h1><a href="/"><%= title %></a></h1>
           </div>
           <div class="col-md-4">
-            <form class="search-form" action="/search" method="post">
-              <div class="input-group">
-                <span class="input-group-addon">@</span>
-                <input type="text" id="search" class="form-control" placeholder="query"
+            <div class="row">
+              <form class="form-inline heading-search-form" action="/search" method="post" role="form">
+                <div class="form-group">
+                <input type="text" id="search" class="form-control col-md-8" placeholder="query"
                        name="search-query"/>
-              </div>
-            </form>
+                </div>
+                <div class="form-group">
+                  <input type="submit" name="search" value="search" class="col-md-4 form-control" class="btn btn-default"/>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
 	    </div>
@@ -59,14 +63,32 @@
         </div>
         <div class="chat-input-button-area-footnote">
           <div class="row">
-            <div class="col-md-4 col-md-offset-8">
+            <div class="col-md-4">
+              <div class="row">
+                <form class="form-inline heading-search-form" action="/search" method="post" role="form">
+                  <div class="form-group">
+                    <input type="text" id="search" class="form-control col-md-8" placeholder="query"
+                           name="search-query"/>
+                  </div>
+                  <div class="form-group">
+                    <input type="submit" name="search" value="search" class="col-md-4 form-control" class="btn btn-default"/>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="col-md-4 col-md-offset-4">
               <p class="chat-input-button-area-footnote-text">
                 Shift + Enterで送信出来ます (<a target="_blank" href="http://daringfireball.net/projects/markdown/syntax">markdown help</a>)
               </p>
             </div>
-            </div>
           </div>
         </div>
+    </div>
+
+    <div class="row">
+
+    </div>
+    
 	    <!-- <button id="delete" class="btn btn-danger btn-sm">履歴削除</button> -->
 	  </div>
     </div>
