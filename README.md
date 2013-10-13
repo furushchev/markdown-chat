@@ -2,6 +2,8 @@
 
 markdownでチャットするとはかどる・・・はず
 
+[デモ](http://markdown-chat.herokuapp.com)
+
 ## インストール
 
 ```bash
