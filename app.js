@@ -14,6 +14,8 @@ var express = require('express')
   , fs = require("fs")
   , $ = require("cheerio");
 
+var config = require("./config");
+
 var app = express();
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -90,7 +92,7 @@ io.sockets.on('connection', function(socket) {
 	// 初回接続時の履歴取得
 	socket.on('msg update', function() {
 		Say.find()
-       .limit(2)
+       .limit(config.PAGE_MAX)
        .exec(function(err, docs) {
 			     socket.emit('msg open', docs.map(function(doc) {
                return {
