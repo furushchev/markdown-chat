@@ -2,5 +2,5 @@
 
 module.exports = {
     TITLE: "Markdown Chat",
-    PAGE_MAX: 200
+    PAGE_MAX: 20
 };
