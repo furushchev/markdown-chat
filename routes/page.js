@@ -2,7 +2,7 @@
 
 var mongoose = require("mongoose");
 var config = require("../config");
-
+var Q = require("q");
 exports.get_url = "/page/:page_id";
 
 exports.get = function(req, res) {
@@ -26,19 +26,18 @@ exports.get = function(req, res) {
                         var page_count = count / pager_length;
                         var min_index = page_id - pager_length > 0 ? page_id - pager_length: 0;
                         var max_index = page_id + pager_length < page_count ? page_id + pager_length: page_count - 1;
-                        console.log(page_id);
-                        console.log(min_index);
-                        console.log(max_index);
-                        res.render("page", {
-                            says: says,
-                            title: config.TITLE,
-                            count: page_count,
-                            index: page_id,
-                            min_index: min_index,
-                            max_index: max_index,
-                        });
-                    }, function(err) {
-                        res.send("500", 500);
+                        Q.allSettled(says.map(function(say) { return say.renderMarkdown(); }))
+                            .then(function(says_html) {
+                                res.render("page", {
+                                    says: says,
+                                    says_html: says_html.map(function(v) { return v.value; }),
+                                    title: config.TITLE,
+                                    count: page_count,
+                                    index: page_id,
+                                    min_index: min_index,
+                                    max_index: max_index,
+                                });
+                            });
                     });
             }
         });

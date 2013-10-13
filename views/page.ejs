@@ -12,7 +12,7 @@
   <body>
     <div class="container">
       <div class="page-header">
-        <h1><%= title %></h1>
+        <h1><a href="/"><%= title %></a></h1>
       </div>
       <!-- pager -->
       <div class="page-pager">
@@ -33,7 +33,37 @@
             <% } %>
             <li><a href="/page/<%= count - 1 %>">&raquo;</a></li>
         </ul>
+      </div> <!-- .page-pager -->
+      
+      <div class="chats-section">
+        <div id="chats">
+          <% for (var i = 0; i < says_html.length; i++) { %>
+             <%- says_html[i] %>
+          <% } %>
+        </div>
       </div>
+
+      <!-- pager -->
+      <div class="page-pager">
+        <ul class="pagination">
+            <li><a href="/page/0">&laquo;</a></li>
+            <% for (var i = min_index; i <= max_index; i++) { %>
+               <% if (i == index) { %>
+                 <li class="active">
+                   <a href="/page/<%= i %>">
+                     <%= i + 1 %>
+                     <span class="sr-only">(current)</span>
+                 </a></li>
+               <% } else { %>
+                 <li>
+                   <a href="/page/<%= i %>"><%= i + 1 %></a>
+                 </li>
+               <% } %>
+            <% } %>
+            <li><a href="/page/<%= count - 1 %>">&raquo;</a></li>
+        </ul>
+      </div> <!-- .page-pager -->
+      
     </div>
   </body>
 </html>
