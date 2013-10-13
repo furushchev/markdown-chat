@@ -20,7 +20,7 @@ mongoose.model('Say', SaySchema);
 var Say = mongoose.model('Say');
 
 Say.renderMarkdownByGithub = function(input_md) {
-    var deffered = Q.defer();
+    var defered = Q.defer();
     var settings = {
         host: 'api.github.com',
         path: '/markdown/raw',
@@ -36,16 +36,16 @@ Say.renderMarkdownByGithub = function(input_md) {
             response.push(chunk);
         });
         res.on('end', function() {
-            deffered.resolve(response.join());
+            defered.resolve(response.join());
         });
     });
     
     req.on('error', function(e) {
-        deffered.reject(e.message);
+        defered.reject(e.message);
     });
     req.write(input_md);
     req.end();
-    return deffered.promise;
+    return defered.promise;
 }
 
 Say.forceToUseBlank = function(html) {
@@ -81,31 +81,41 @@ Say.prototype.renderMarkdown = function() {
     // (markdown -> html rendered by github -> html formatted by chat.ejs)
     // but if the markdown is already rendered by github, we don't call it twice
     // the html is 
-    // this is asynchronous method, so returns deffered object.
+    // this is asynchronous method, so returns defered object.
     var self = this;
     if (self.markdown) {
-        var deffered = Q.defer();
+        var defered = Q.defer();
         var rendered_html = self.renderWithEJS();
         // update the markdown property
-        deffered.resolve(rendered_html); // SetTimeout required?
-        return deffered.promise;
+        defered.resolve(rendered_html); // SetTimeout required?
+        return defered.promise;
     }
     else {
         return Say.renderMarkdownByGithub(self.raw_markdown)
             .then(function(githubhtml) {
-                var deffered = Q.defer();
+                var defered = Q.defer();
                 self.markdown = Say.forceToUseBlank(githubhtml);
-                deffered.resolve(githubhtml);
+                defered.resolve(githubhtml);
                 self.save();
-                return deffered.promise;
+                return defered.promise;
             })
             .then(function(githubhtml) {
-                var deffered = Q.defer();
+                var defered = Q.defer();
                 var rendered_html = self.renderWithEJS();
-                deffered.resolve(rendered_html); // SetTimeout required?
-                return deffered.promise;
+                defered.resolve(rendered_html); // SetTimeout required?
+                return defered.promise;
             });
     }
     
 };
 
+Say.countObject = function() {
+    var deferred = Q.defer();
+    Say.count(function(err, count) {
+        if (err)
+            deferred.reject(err);
+        else
+            deferred.resolve(count);
+    });
+    return deferred.promise;
+};

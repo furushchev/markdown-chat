@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/github.css' />
+    <link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
+    <link rel='stylesheet' href='/stylesheets/bootstrap-theme.min.css' />
+    <link rel="stylesheet/less" type="text/css" href="/less/style.less" />
+    <script src="/bower_components/less/dist/less-1.4.2.js" type="text/javascript"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <div class="container">
+      <div class="page-header">
+        <h1><a href="/"><%= title %></a></h1>
+      </div>
+      <!-- pager -->
+      <div class="page-pager">
+        <ul class="pagination">
+            <li><a href="/page/0">&laquo;</a></li>
+            <% for (var i = min_index; i <= max_index; i++) { %>
+               <% if (i == index) { %>
+                 <li class="active">
+                   <a href="/page/<%= i %>">
+                     <%= i + 1 %>
+                     <span class="sr-only">(current)</span>
+                 </a></li>
+               <% } else { %>
+                 <li>
+                   <a href="/page/<%= i %>"><%= i + 1 %></a>
+                 </li>
+               <% } %>
+            <% } %>
+            <li><a href="/page/<%= count - 1 %>">&raquo;</a></li>
+        </ul>
+      </div> <!-- .page-pager -->
+      
+      <div class="chats-section">
+        <div id="chats">
+          <% for (var i = 0; i < says_html.length; i++) { %>
+             <%- says_html[i] %>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- pager -->
+      <div class="page-pager">
+        <ul class="pagination">
+            <li><a href="/page/0">&laquo;</a></li>
+            <% for (var i = min_index; i <= max_index; i++) { %>
+               <% if (i == index) { %>
+                 <li class="active">
+                   <a href="/page/<%= i %>">
+                     <%= i + 1 %>
+                     <span class="sr-only">(current)</span>
+                 </a></li>
+               <% } else { %>
+                 <li>
+                   <a href="/page/<%= i %>"><%= i + 1 %></a>
+                 </li>
+               <% } %>
+            <% } %>
+            <li><a href="/page/<%= count - 1 %>">&raquo;</a></li>
+        </ul>
+      </div> <!-- .page-pager -->
+      
+    </div>
+  </body>
+</html>
+
+
