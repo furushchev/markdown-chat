@@ -14,7 +14,7 @@ exports.post = function(req, res) {
                 var text = say.raw_markdown;
                 if (text) {
                     for (var i = 0; i < splitted_query.length; i++) {
-                        if (text.indexOf(query) == -1) {
+                        if (text.indexOf(splitted_query[i]) == -1) {
                             return false;
                         }
                     }
