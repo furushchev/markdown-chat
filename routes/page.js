@@ -22,7 +22,7 @@ exports.get = function(req, res) {
                 Say.countObject()
                     .then(function(count) {
                         // resolve pager
-                        var pager_length = 2;
+                        var pager_length = config.PAGE_MAX;
                         var page_count = count / pager_length;
                         var min_index = page_id - pager_length > 0 ? page_id - pager_length: 0;
                         var max_index = page_id + pager_length < page_count ? page_id + pager_length: page_count - 1;
