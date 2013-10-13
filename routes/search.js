@@ -29,7 +29,8 @@ exports.post = function(req, res) {
                     res.render("search", {
                         says: matched_says,
                         says_html: says_html.map(function(v) { return v.value}),
-                        title: "search result of \"" + query + "\": matched " + matched_says.length
+                        title: "search result of \"" + query + "\": matched " + matched_says.length,
+                        placeholder: query
                     });
                 });
         });
