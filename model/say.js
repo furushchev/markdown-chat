@@ -19,6 +19,10 @@ var SaySchema = new Schema({
 mongoose.model('Say', SaySchema);
 var Say = mongoose.model('Say');
 
+/**
+ * Convert a string of Markdown into html using github API.
+ * @param {string} input_md - a string written in Markdown
+ */
 Say.renderMarkdownByGithub = function(input_md) {
     var defered = Q.defer();
     var settings = {

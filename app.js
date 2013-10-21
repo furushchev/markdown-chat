@@ -77,12 +77,6 @@ var Say = mongoose.model('Say');
 // settings for socket.io
 var io = require('socket.io').listen(server);
 
-io.configure(function() {
-    io.set("transports", ["xhr-polling"]); 
-    io.set("polling duration", 10); 
-
-});
-
 server.listen(app.get('port'), function(){
   console.log('express server listening on port ' + app.get('port'));
 });
