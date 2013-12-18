@@ -1,6 +1,5 @@
-
 /**
- * Module dependencies.
+ * markdown chat
  */
 
 var express = require('express')
@@ -12,6 +11,8 @@ var express = require('express')
   , path = require('path')
   , ejs = require("ejs")
   , fs = require("fs")
+  , passport = require("passport")
+  , LocalStrategy = require('passport-local').Strategy
   , $ = require("cheerio");
 
 var config = require("./config");

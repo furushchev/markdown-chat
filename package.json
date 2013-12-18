@@ -19,6 +19,7 @@
     "q": "*",
     "lodash": "*",
     "mongoose-text-search": "*",
-    "passport-local": "~0.1.6"
+    "passport-local": "~0.1.6",
+    "passport": "~0.1.17"
   }
 }
