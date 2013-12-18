@@ -13,6 +13,7 @@ var express = require('express')
   , fs = require("fs")
   , passport = require("passport")
   , LocalStrategy = require('passport-local').Strategy
+  , flash = require('connect-flash')
   , $ = require("cheerio");
 
 var config = require("./config");
@@ -42,6 +43,7 @@ app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(express.cookieParser());
 app.use(express.session({ secret: 'markdown-chat-0E46CB44-0B66-4B74-AD6B-8D467D51FBC8' }));
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(app.router);
