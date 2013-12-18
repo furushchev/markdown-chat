@@ -1,5 +1,8 @@
 // routes/login.js
 var config = require('../config');
+var mongoose = require('mongoose');
+
+var User = mongoose.model('User');
 
 exports.get_url = '/register';
 
@@ -36,6 +39,22 @@ exports.post = function(req, res, nex) {
     res.redirect('/register');
   }
   else {
-    res.send({hello: 'hello'});
+    User.newUser({
+      nickname: nickname,
+      password: pass,
+      email: email
+    }, function(error, user) {
+      if (error) {
+        req.flash('error', error.message);
+        res.redirect('/register');
+      }
+      else {
+        // success to create new account, force to login automatically
+        req.login(user, function(err) {
+          if (err) next(err);
+          else res.redirect('/');
+        });
+      }
+    });
   }
 };

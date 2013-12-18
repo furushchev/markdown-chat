@@ -3,7 +3,6 @@
  */
 
 var express = require('express')
-  , routes = require('./routes')
   , user = require('./routes/user')
   , http = require('http')
   , https = require('https')
@@ -27,7 +26,7 @@ if (process.env.MONGOLAB_URI) {
     mongoose.connect(process.env.MONGOLAB_URI);
 }
 else {
-    mongoose.connect('mongodb://localhost/markdown_chat');
+    mongoose.connect('mongodb://localhost/markdown_chat2');
 }
 
 // load local libraries

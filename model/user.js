@@ -1,4 +1,5 @@
 /**
+ * model/user
  * User model
  */
 
@@ -11,11 +12,11 @@ var LocalStrategy = require('passport-local').Strategy;
 var SALT_WORK_FACTOR = 10;
 
 var UserSchema = new Schema({
-  nick_name: {type: String, required: true, unique: true},
+  nickname: {type: String},
   email: {type: String},
-  password: {type: String, required: true},
-  created_at: {type: Date, required: true},
-  updated_at: {type: Date, required: true}
+  password: {type: String},
+  created_at: {type: Date},
+  updated_at: {type: Date}
 });
 
 mongoose.model('User', UserSchema);
@@ -34,7 +35,7 @@ UserSchema.pre('save', function(next) {
   var now = new Date();
   // update timestamp
   if (user.isModified('password') ||
-      user.isModified('nick_name') ||
+      user.isModified('nickname') ||
       user.isModified('email')) {
     user.updated_at = now;
   }
@@ -59,6 +60,35 @@ UserSchema.methods.comparePassword = function(candidatePassword, cb) {
     if(err) return cb(err);
     cb(null, isMatch);
   });
+};
+
+// create new user
+// cb := function(error, object)
+User.newUser = function(spec, cb) {
+  if (!spec.nickname) {
+    cb(new Error('No nickname is specified'));
+  }
+  else if (!spec.password) {
+    cb(new Error('No password is specified'));
+  }
+  else {
+    
+    // check the uniqness
+    User.findOne({nickname: spec.nickname}, function(err, user) {
+      if (err) {
+        cb(err);
+      }
+      else if (user) {
+        cb(new Error('nickname: ' + spec.nickname + ' is already used'));
+      }
+      else {
+        var user = new User(spec);
+        user.save(function(err) {
+          cb(err, user);
+        });
+      }
+    });
+  }
 };
 
 // registering passport methods
@@ -86,4 +116,5 @@ passport.use(new LocalStrategy(function(username, password, done) {
     });
   });
 }));
+
 
