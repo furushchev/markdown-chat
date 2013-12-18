@@ -87,23 +87,23 @@ server.listen(app.get('port'), function(){
 
 io.sockets.on('connection', function(socket) {
 
-	// 初回接続時の履歴取得
-	socket.on('msg update', function() {
-		Say.find()
+  // 初回接続時の履歴取得
+  socket.on('msg update', function() {
+    Say.find()
        .limit(config.PAGE_MAX)
        .exec(function(err, docs) {
-			     socket.emit('msg open', docs.map(function(doc) {
+           socket.emit('msg open', docs.map(function(doc) {
                return {
                    html: doc.renderWithEJS(),
                    date: doc.date,
                    _id: doc._id
                };
            }));
-		});
-	});
+    });
+  });
 
-	// when received message
-	socket.on('msg send', function(data) {
+  // when received message
+  socket.on('msg send', function(data) {
       var now = new Date(); // now
       var say = new Say({
           name: data.name,
@@ -126,14 +126,14 @@ io.sockets.on('connection', function(socket) {
           })
   });
 
-	// delete from database
-	socket.on('deleteDB', function() {
-		socket.emit('db drop');
-		socket.broadcast.emit('db drop');
-		Say.find().remove();
-	});
+  // delete from database
+  socket.on('deleteDB', function() {
+    socket.emit('db drop');
+    socket.broadcast.emit('db drop');
+    Say.find().remove();
+  });
 
-	socket.on('disconnect', function() {
-		console.log('disconnected.');
-	});
+  socket.on('disconnect', function() {
+    console.log('disconnected.');
+  });
 });
