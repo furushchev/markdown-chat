@@ -20,6 +20,7 @@
     "lodash": "*",
     "mongoose-text-search": "*",
     "passport-local": "~0.1.6",
-    "passport": "~0.1.17"
+    "passport": "~0.1.17",
+    "bcrypt": "~0.7.7"
   }
 }
