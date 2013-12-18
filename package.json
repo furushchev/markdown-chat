@@ -21,6 +21,7 @@
     "mongoose-text-search": "*",
     "passport-local": "~0.1.6",
     "passport": "~0.1.17",
-    "bcrypt": "~0.7.7"
+    "bcrypt": "~0.7.7",
+    "connect-flash": "~0.1.1"
   }
 }
