@@ -19,14 +19,16 @@
           <div class="well">
             <div class="row">
               <div class="col-md-10 col-md-offset-1">
-                <input type="text" class="form-control login-form input-lg" id="nickname" placeholder="Enter nickname" />
-                <input type="email" class="form-control login-form input-lg" id="email" placeholder="Enter email (optional)" />
-                <input type="password" class="form-control login-form input-lg" id="password" placeholder="Enter password" />
-                <input type="password" class="form-control login-form input-lg" id="repassword" placeholder="Re-Enter password" />
-                <input type="submit" class="form-control btn btn-primary login-form input-lg" id="submit" value="Register" />
-                <p class="pull-right">
-                  <a href="/login">Login</a>
-                </p>
+                <form method="post">
+                  <input type="text" class="form-control login-form input-lg" name="nickname" id="nickname" placeholder="Enter nickname" />
+                  <input type="email" class="form-control login-form input-lg" name="email" id="email" placeholder="Enter email (optional)" />
+                  <input type="password" class="form-control login-form input-lg" name="password" id="password" placeholder="Enter password" />
+                  <input type="password" class="form-control login-form input-lg" name="repassword" id="repassword" placeholder="Re-Enter password" />
+                  <input type="submit" class="form-control btn btn-primary login-form input-lg" name="submit" id="submit" value="Register" />
+                  <p class="pull-right">
+                    <a href="/login">Login</a>
+                  </p>
+                </form>
               </div>
             </div>
             
