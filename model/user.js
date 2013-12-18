@@ -28,11 +28,15 @@ var User = mongoose.model('User');
  **/
 UserSchema.pre('save', function(next) {
   var user = this;
+  var now = new Date();
   // update timestamp
   if (user.isModified('password') ||
       user.isModified('nick_name') ||
       user.isModified('email')) {
-    user.updated_at = new Date();
+    user.updated_at = now;
+  }
+  if (!user.created_at) {
+    user.created_at = now;
   }
   if(!user.isModified('password')) return next();
   bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
