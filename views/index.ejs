@@ -7,11 +7,11 @@
     <link rel='stylesheet' href='/stylesheets/bootstrap-theme.min.css' />
     <link rel="stylesheet/less" type="text/css" href="/less/style.less" />
     <script src="/bower_components/less/dist/less-1.4.2.js" type="text/javascript"></script>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
     <div class="container">
-	    <div class="page-header">
+      <div class="page-header">
         <div class="row">
           <div class="col-md-8">
             <h1><a href="/"><%= title %></a></h1>
@@ -30,7 +30,7 @@
             </div>
           </div>
         </div>
-	    </div>
+      </div>
     <div class="panel panel-success">
       <div class="panel-heading">
         
@@ -42,22 +42,25 @@
       <div id="chats">
         
       </div>
-	  <form class="form-inline chat-input-form">
+    <form class="form-inline chat-input-form">
         <div class="input-group chat-name-input-group">
           <span class="input-group-addon chat-name-input-preaddon">@</span>
           <input type="text" class="form-control chat-name-input" placeholder="Username"
+                 <% if (logged_in) { %>
+                 value="<%= nickname %>"
+                 <% } %>
                  name="namae" id="namae">
         </div>
-	    <textarea cols="100", rows="5"
-				  name="message" id="message"
-				  class="form-control chat-input-markdown"
-				  placeholder="Input text with markdown syntax!"></textarea>
-	  </form>
-	  <div class="chat-input-button-area">
+      <textarea cols="100", rows="5"
+          name="message" id="message"
+          class="form-control chat-input-markdown"
+          placeholder="Input text with markdown syntax!"></textarea>
+    </form>
+    <div class="chat-input-button-area">
       <div class="row">
           <div class="send-button-area">
             <div class="col-md-2 col-md-offset-10">
-	          <button id="btn" class="btn btn-primary btn-sm pull-right">送信</button>
+            <button id="btn" class="btn btn-primary btn-sm pull-right">送信</button>
             </div>
           </div>
         </div>
@@ -91,19 +94,19 @@
 
     </div>
     
-	    <!-- <button id="delete" class="btn btn-danger btn-sm">履歴削除</button> -->
-	  </div>
+      <!-- <button id="delete" class="btn btn-danger btn-sm">履歴削除</button> -->
     </div>
-	<script type="text/javascript"
-	        src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    </div>
+  <script type="text/javascript"
+          src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script type="text/javascript" src="/bower_components/jquery.cookie/jquery.cookie.js"></script>
-	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
-	<script type="text/javascript" src="/bower_components/taboverride/build/output/taboverride.min.js"></script>
-	<script type="text/javascript" src="/bower_components/jquery.taboverride/build/jquery.taboverride.min.js"></script>
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+  <script type="text/javascript" src="/bower_components/taboverride/build/output/taboverride.min.js"></script>
+  <script type="text/javascript" src="/bower_components/jquery.taboverride/build/jquery.taboverride.min.js"></script>
 
-	<script type="text/javascript" src="/javascripts/bootstrap.min.js"></script>
-	<script type="text/javascript" src="/javascripts/say.js"></script>
-	<script type="text/javascript" src="/javascripts/index.js"></script>
+  <script type="text/javascript" src="/javascripts/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/javascripts/say.js"></script>
+  <script type="text/javascript" src="/javascripts/index.js"></script>
 
   </body>
 </html>
