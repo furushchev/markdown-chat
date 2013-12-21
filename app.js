@@ -82,7 +82,7 @@ var Say = mongoose.model('Say');
 // settings for socket.io
 var io = require('socket.io').listen(server);
 
-server.listen(app.get('port'), function(){
+server.listen(app.get('port'), function() {
   console.log('express server listening on port ' + app.get('port'));
 });
 

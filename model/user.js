@@ -55,7 +55,7 @@ UserSchema.pre('save', function(next) {
 
 // Password verification
 // candidatePassword is not encrypted one
-UserSchema.methods.comparePassword = function(candidatePassword, cb) {
+User.prototype.comparePassword = function(candidatePassword, cb) {
   bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
     if(err) return cb(err);
     cb(null, isMatch);
@@ -102,10 +102,10 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
-passport.use(new LocalStrategy(function(username, password, done) {
-  User.findOne({ username: username }, function(err, user) {
+passport.use(new LocalStrategy(function(nickname, password, done) {
+  User.findOne({ nickname: nickname }, function(err, user) {
     if (err) { return done(err); }
-    if (!user) { return done(null, false, { message: 'Unknown user ' + username }); }
+    if (!user) { return done(null, false, { message: 'Unknown user: ' + nickname }); }
     user.comparePassword(password, function(err, isMatch) {
       if (err) return done(err);
       if(isMatch) {
@@ -116,5 +116,3 @@ passport.use(new LocalStrategy(function(username, password, done) {
     });
   });
 }));
-
-
