@@ -12,14 +12,14 @@ $(function(){
       "msg": message.val(),
     };
     socket.emit('msg send', sendData);
-    $.cookie("name", name.val()); // store the name value
+    // $.cookie("name", name.val()); // store the name value
     message.val('');        // clear message
   };
   
   // check the cookie to recall name
-  if ($.cookie("name")) {
-    $('input[name="namae"]').val($.cookie("name"));
-  }
+  // if ($.cookie("name")) {
+  //   $('input[name="namae"]').val($.cookie("name"));
+  // }
 
   var socket = io.connect(location.href);
 
