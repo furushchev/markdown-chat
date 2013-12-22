@@ -1,40 +1,4 @@
 <% include header %>
-<div class="container">
-  <div class="page-header">
-    <div class="row">
-      <div class="col-md-6">
-        <h1><a href="/"><%= title %></a></h1>
-      </div>
-      <div class="col-md-6">
-        <div class="row">
-          <div class="col-md-5">
-            <ol class="breadcrumb login-register-link">
-              <% if (!logged_in) { %>
-              <li><a href="/register">Register</a></li>
-              <li><a href="/login">Login</a></li>
-              <% } else { %>
-              <li>logged in as <%= nickname %></li>
-              <li><a href="/logout">Logout</a></li>
-              <% } %>
-            </ol>
-          </div>
-          <div class="col-md-7">
-            <div class="row">
-              <form class="form-inline heading-search-form" action="/search" method="post" role="form">
-                <div class="form-group">
-                  <input type="text" id="search" class="form-control col-md-8" placeholder="query"
-                         name="search-query"/>
-                </div>
-                <div class="form-group">
-                  <input type="submit" name="search" value="search" class="col-md-4 form-control" class="btn btn-default"/>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
   <div class="panel panel-success">
     <div class="panel-heading">
       
@@ -100,5 +64,5 @@
   
   <!-- <button id="delete" class="btn btn-danger btn-sm">履歴削除</button> -->
 </div>
-</div>
+
 <% include footer %>
