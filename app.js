@@ -1,10 +1,8 @@
-
 /**
- * Module dependencies.
+ * markdown chat
  */
 
 var express = require('express')
-  , routes = require('./routes')
   , user = require('./routes/user')
   , http = require('http')
   , https = require('https')
@@ -12,11 +10,28 @@ var express = require('express')
   , path = require('path')
   , ejs = require("ejs")
   , fs = require("fs")
+  , passport = require("passport")
+  , LocalStrategy = require('passport-local').Strategy
+  , flash = require('connect-flash')
   , $ = require("cheerio");
 
 var config = require("./config");
 
 var app = express();
+
+var server = http.createServer(app);
+
+
+if (process.env.MONGOLAB_URI) {
+    mongoose.connect(process.env.MONGOLAB_URI);
+}
+else {
+    mongoose.connect('mongodb://localhost/markdown_chat2');
+}
+
+// load local libraries
+require("./model");
+
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
@@ -27,26 +42,16 @@ app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(express.cookieParser());
 app.use(express.session({ secret: 'markdown-chat-0E46CB44-0B66-4B74-AD6B-8D467D51FBC8' }));
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
-
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-var server = http.createServer(app);
-
-
-if (process.env.MONGOLAB_URI) {
-    mongoose.connect(process.env.MONGOLAB_URI);
-}
-else {
-    mongoose.connect('mongodb://localhost/markdown_chat');
-}
-
-// load local libraries
-require("./model");
 
 // routing
 var routes = require("./routes");
@@ -77,29 +82,29 @@ var Say = mongoose.model('Say');
 // settings for socket.io
 var io = require('socket.io').listen(server);
 
-server.listen(app.get('port'), function(){
+server.listen(app.get('port'), function() {
   console.log('express server listening on port ' + app.get('port'));
 });
 
 io.sockets.on('connection', function(socket) {
 
-	// 初回接続時の履歴取得
-	socket.on('msg update', function() {
-		Say.find()
+  // 初回接続時の履歴取得
+  socket.on('msg update', function() {
+    Say.find()
        .limit(config.PAGE_MAX)
        .exec(function(err, docs) {
-			     socket.emit('msg open', docs.map(function(doc) {
+           socket.emit('msg open', docs.map(function(doc) {
                return {
                    html: doc.renderWithEJS(),
                    date: doc.date,
                    _id: doc._id
                };
            }));
-		});
-	});
+    });
+  });
 
-	// when received message
-	socket.on('msg send', function(data) {
+  // when received message
+  socket.on('msg send', function(data) {
       var now = new Date(); // now
       var say = new Say({
           name: data.name,
@@ -122,14 +127,14 @@ io.sockets.on('connection', function(socket) {
           })
   });
 
-	// delete from database
-	socket.on('deleteDB', function() {
-		socket.emit('db drop');
-		socket.broadcast.emit('db drop');
-		Say.find().remove();
-	});
+  // delete from database
+  socket.on('deleteDB', function() {
+    socket.emit('db drop');
+    socket.broadcast.emit('db drop');
+    Say.find().remove();
+  });
 
-	socket.on('disconnect', function() {
-		console.log('disconnected.');
-	});
+  socket.on('disconnect', function() {
+    console.log('disconnected.');
+  });
 });

@@ -1,6 +1,6 @@
-var _ = require("lodash");
-var files = ["_index", "say", "page", "search"];
+var _ = require('lodash');
+var files = ['_index', 'say', 'page', 'search', 'login', 'register', 'logout'];
 
 exports.routes = _.map(files, function(f) {
-    return require("./" + f);
+    return require('./' + f);
 });
