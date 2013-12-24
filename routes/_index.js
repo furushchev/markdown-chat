@@ -13,7 +13,9 @@ exports.get = function(req, res){
     });
   }
   else {
-    res.render('index', { title: config.TITLE,
-                          logged_in: false});
+    res.render('index', {
+      title: config.TITLE,
+      logged_in: false
+    });
   }
 };
