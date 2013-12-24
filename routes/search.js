@@ -32,6 +32,7 @@ exports.post = function(req, res) {
             says_html: says_html.map(function(v) { return v.value}),
             //title: "search result of \"" + query + "\": matched " + matched_says.length,
             title: config.TITLE,
+            query: query,
             logged_in: req.isAuthenticated(),
             nickname: req.isAuthenticated() ? req.user.nickname : null,
             placeholder: query

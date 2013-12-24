@@ -1,9 +1,16 @@
 <% include header %>
-      <div class="chats-section">
-        <div id="chats">
-          <% for (var i = 0; i < says_html.length; i++) { %>
-             <%- says_html[i] %>
-          <% } %>
-        </div>
-      </div>
+<div class="row">
+  <div class="col-md-12">
+    <h2>
+      search result of "<%=query%>": matched <%= says_html.length %>
+    </h2>
+  </div>
+</div>
+<div class="chats-section">
+  <div id="chats">
+    <% for (var i = 0; i < says_html.length; i++) { %>
+       <%- says_html[i] %>
+       <% } %>
+  </div>
+</div>
 <% include footer %>
