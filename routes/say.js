@@ -24,7 +24,8 @@ exports.get = function(req, res) {
                         html: rendered_html,
                         date_str: say.readableDateStr(),
                         _id: say._id,
-                        raw_markdown: (say.raw_markdown || "").replace(/(^\s+)|(\s+$)/g, "")
+                        raw_markdown: (say.raw_markdown || "")
+                        .replace(/(^\s+)|(\s+$)/g, "")
                     });
                 });
         }
