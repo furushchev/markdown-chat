@@ -10,6 +10,7 @@
   <div id="chats">
     
   </div>
+  <% if (logged_in) { %>
   <form class="form-inline chat-input-form">
     <div class="input-group chat-name-input-group">
       <span class="input-group-addon chat-name-input-preaddon">@</span>
@@ -24,6 +25,7 @@
               class="form-control chat-input-markdown"
               placeholder="Input text with markdown syntax!"></textarea>
   </form>
+  
   <div class="chat-input-button-area">
     <div class="row">
       <div class="send-button-area">
@@ -45,7 +47,6 @@
       </div>
     </div>
   </div>
-  <% if (logged_in) { %>
   <script>
     var LOGIN_USER_ID = "<%- user_id %>";
   </script>
