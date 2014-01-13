@@ -24,7 +24,10 @@ $(function(){
   var socket = io.connect(location.href);
 
   socket.on('connect', function() {
-    socket.emit('msg update');
+    // sending login information
+    socket.emit('msg update', {
+      user_id: LOGIN_USER_ID
+    });
     console.log('connected.');
   });
 
