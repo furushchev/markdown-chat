@@ -35,7 +35,8 @@ Say.renderMarkdownByGithub = function(input_md) {
     path: '/markdown/raw',
     method: 'POST',
     headers: {
-      'Content-Type': 'text/plain'
+      'Content-Type': 'text/plain',
+      'User-Agent': 'markdown-chat'
     }
   };
   var req = https.request(settings, function(res) {
