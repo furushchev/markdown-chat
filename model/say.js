@@ -1,6 +1,7 @@
 // model/say.js
 
 var mongoose = require("mongoose")
+, util = require('util')
 , https = require('https')
 , Q = require("q")
 , $ = require("cheerio")
@@ -13,7 +14,11 @@ var SaySchema = new Schema({
   date: Date,
   message: String,
   markdown: String,
-  raw_markdown: String
+  raw_markdown: String,
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  }
 });
 
 mongoose.model('Say', SaySchema);
@@ -30,7 +35,8 @@ Say.renderMarkdownByGithub = function(input_md) {
     path: '/markdown/raw',
     method: 'POST',
     headers: {
-      'Content-Type': 'text/plain'
+      'Content-Type': 'text/plain',
+      'User-Agent': 'markdown-chat'
     }
   };
   var req = https.request(settings, function(res) {
@@ -123,3 +129,12 @@ Say.countObject = function() {
   });
   return deferred.promise;
 };
+
+// migration sequence
+// remove old Say objects
+Say.find().exists('user', false)
+  .exec(function(err, says) {
+    says.forEach(function(say) {
+      say.remove();
+    });
+  });
