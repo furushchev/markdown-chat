@@ -1,0 +1,31 @@
+<!-- each chat -->
+<div class="say-wrapper" id="say_<%= _id %>">
+  <div class="say">
+    <div class="say-header">
+      <div class="row">
+        <div class="date col-md-6">
+          <a class="date-sentence" href="/say/<%= _id %>"
+             target="_blank"
+             data-toggle="tooltipbnnn"
+             title="<%= date_str %>">
+            <%= date_str %>
+          </a>
+        </div>
+        <div class="author col-md-6">
+          <div class="pull-right">
+            @<%= name || "unknown"%>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="say-content">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="markdown">
+            <%- markdown %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

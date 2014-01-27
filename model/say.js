@@ -66,6 +66,7 @@ Say.forceToUseBlank = function(html) {
 };
 
 var chat_ejs = fs.readFileSync("views/chat.ejs", "utf8"); // node-dev cannot ditect the change of chat.ejs
+var chat_me_ejs = fs.readFileSync("views/chat_me.ejs", "utf8"); // node-dev cannot ditect the change of chat.ejs
 
 Say.prototype.readableDateStr = function() {
   var self = this;
@@ -86,16 +87,35 @@ Say.prototype.renderWithEJS = function() {
   }
 }
 
-Say.prototype.renderMarkdown = function() {
+Say.prototype.renderMeWithEJS = function() {
+  try {
+    var self = this;
+    self.date_str = self.readableDateStr();
+    return ejs.render(chat_me_ejs, self);
+  } catch(e) {
+    console.log(e);
+  }
+}
+
+
+Say.prototype.renderMarkdown = function(user_id) {
   // rendering markdown into html
   // (markdown -> html rendered by github -> html formatted by chat.ejs)
   // but if the markdown is already rendered by github, we don't call it twice
   // the html is 
   // this is asynchronous method, so returns defered object.
+  // if user_id equals to self.user_id, 
   var self = this;
+  console.log(user_id);
+  console.log(self.user_id);
   if (self.markdown) {
     var defered = Q.defer();
-    var rendered_html = self.renderWithEJS();
+    if (user_id.toString() === self.user_id.toString()) {
+      var rendered_html = self.renderMeWithEJS();
+    }
+    else {
+      var rendered_html = self.renderWithEJS();
+    }
     // update the markdown property
     defered.resolve(rendered_html); // SetTimeout required?
     return defered.promise;
@@ -111,7 +131,12 @@ Say.prototype.renderMarkdown = function() {
       })
       .then(function(githubhtml) {
         var defered = Q.defer();
-        var rendered_html = self.renderWithEJS();
+        if (user_id.toString() === self.user_id.toString()) {
+          var rendered_html = self.renderMeWithEJS();
+        }
+        else {
+          var rendered_html = self.renderWithEJS();
+        }
         defered.resolve(rendered_html); // SetTimeout required?
         return defered.promise;
       });
