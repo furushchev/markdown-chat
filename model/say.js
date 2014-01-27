@@ -138,3 +138,12 @@ Say.find().exists('user', false)
       say.remove();
     });
   });
+
+Say.find({'user': null})
+  .exec(function(err, says) {
+    if (says) {
+      says.forEach(function(say) {
+        say.remove();
+      });
+    }
+  });

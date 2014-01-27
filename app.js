@@ -92,7 +92,9 @@ io.sockets.on('connection', function(socket) {
   socket.on('msg update', function(msg) {
     console.log(msg);
     if (msg.hasOwnProperty('user_id')) {
-      user_id = msg['user_id'];
+      if (msg['user_id']) {
+        user_id = msg['user_id'];
+      }
     }
     Say.find()
       .limit(config.PAGE_MAX)
