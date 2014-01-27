@@ -10,6 +10,7 @@
   <div id="chats">
     
   </div>
+  <% if (logged_in) { %>
   <form class="form-inline chat-input-form">
     <div class="input-group chat-name-input-group">
       <span class="input-group-addon chat-name-input-preaddon">@</span>
@@ -24,11 +25,12 @@
               class="form-control chat-input-markdown"
               placeholder="Input text with markdown syntax!"></textarea>
   </form>
+  
   <div class="chat-input-button-area">
     <div class="row">
       <div class="send-button-area">
         <div class="col-md-2 col-md-offset-10">
-          <button id="btn" class="btn btn-primary btn-sm pull-right">送信</button>
+          <button id="btn" class="btn btn-primary btn-sm pull-right">Send</button>
         </div>
       </div>
     </div>
@@ -36,7 +38,7 @@
       <div class="row">
         <div class="col-md-4 col-md-offset-8">
           <p class="chat-input-button-area-footnote-text">
-            Shift + Enterで送信出来ます
+            You can send it by 'Shift + Enter'
             (<a target="_blank" href="http://daringfireball.net/projects/markdown/syntax">
               markdown help
             </a>)
@@ -45,7 +47,10 @@
       </div>
     </div>
   </div>
-
+  <script>
+    var LOGIN_USER_ID = "<%- user_id %>";
+  </script>
+  <% } %>
   <!-- <button id="delete" class="btn btn-danger btn-sm">履歴削除</button> -->
 </div>
 

@@ -36,6 +36,9 @@
                 <div class="input-group">
                   <input type="text" id="search"
                          class="form-control" placeholder="query"
+                         <% if (locals.query) { %>
+                         value="<%= query %>"
+                         <% } %>
                          name="search-query"/>
                   <span class="input-group-btn">
                     <input type="submit" name="search" value="search" class="form-control" class="btn btn-default"/>

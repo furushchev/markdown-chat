@@ -9,11 +9,14 @@ exports.get = function(req, res){
     res.render('index', {
       title: config.TITLE,
       logged_in: true,
-      nickname: req.user.nickname
+      nickname: req.user.nickname,
+      user_id: req.user._id
     });
   }
   else {
-    res.render('index', { title: config.TITLE,
-                          logged_in: false});
+    res.render('index', {
+      title: config.TITLE,
+      logged_in: false
+    });
   }
 };
