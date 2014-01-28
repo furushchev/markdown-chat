@@ -90,19 +90,29 @@ io.sockets.on('connection', function(socket) {
   var user_id = null;
   // 初回接続時の履歴取得
   socket.on('msg update', function(msg) {
-    console.log(msg);
     if (msg.hasOwnProperty('user_id')) {
-      user_id = msg['user_id'];
+      if (msg['user_id']) {
+        user_id = msg['user_id'];
+      }
     }
     Say.find()
       .limit(config.PAGE_MAX)
       .exec(function(err, docs) {
         socket.emit('msg open', docs.map(function(doc) {
-          return {
-            html: doc.renderWithEJS(),
-            date: doc.date,
-            _id: doc._id
-          };
+          if (user_id && doc.user.toString() === user_id.toString()) {
+            return {
+              html: doc.renderMeWithEJS(),
+              date: doc.date,
+              _id: doc._id
+            };
+          }
+          else {
+            return {
+              html: doc.renderWithEJS(),
+              date: doc.date,
+              _id: doc._id
+            };
+          }
         }));
       });
   });
@@ -117,7 +127,7 @@ io.sockets.on('connection', function(socket) {
       message: data.message,
       user: user_id
     });
-    say.renderMarkdown()
+    say.renderMarkdown(user_id)
       .then(function(rendered_html) {
         var send_data = {
           html: rendered_html,

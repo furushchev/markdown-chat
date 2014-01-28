@@ -10,8 +10,10 @@
   <div id="chats">
     
   </div>
-  <% if (logged_in) { %>
   <form class="form-inline chat-input-form">
+    <% if (!logged_in) { %>
+    <fieldset disabled>
+    <% } %>
     <div class="input-group chat-name-input-group">
       <span class="input-group-addon chat-name-input-preaddon">@</span>
       <input type="text" class="form-control chat-name-input" placeholder="Username"
@@ -23,14 +25,23 @@
     <textarea cols="100", rows="5"
               name="message" id="message"
               class="form-control chat-input-markdown"
-              placeholder="Input text with markdown syntax!"></textarea>
+              <% if (logged_in) { %>
+              placeholder="Input text with markdown syntax!"
+              <% } else { %>
+              placeholder="Please register or log in first"
+              <% } %>
+              ></textarea>
+    <% if (!logged_in) { %>
+    </fieldset>
+    <% } %>
   </form>
   
   <div class="chat-input-button-area">
     <div class="row">
       <div class="send-button-area">
         <div class="col-md-2 col-md-offset-10">
-          <button id="btn" class="btn btn-primary btn-sm pull-right">Send</button>
+          <button <% if (logged_in) { %> id="btn" <% } %>
+                  class="btn btn-primary btn-sm pull-right">Send</button>
         </div>
       </div>
     </div>
@@ -47,8 +58,13 @@
       </div>
     </div>
   </div>
+  <% if (logged_in) { %>
   <script>
     var LOGIN_USER_ID = "<%- user_id %>";
+  </script>
+  <% } else { %>
+  <script>
+    var LOGIN_USER_ID = false;
   </script>
   <% } %>
   <!-- <button id="delete" class="btn btn-danger btn-sm">履歴削除</button> -->

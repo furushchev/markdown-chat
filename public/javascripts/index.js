@@ -28,7 +28,6 @@ $(function(){
     socket.emit('msg update', {
       user_id: LOGIN_USER_ID
     });
-    console.log('connected.');
   });
 
 

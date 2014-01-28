@@ -72,7 +72,6 @@ User.newUser = function(spec, cb) {
     cb(new Error('No password is specified'));
   }
   else {
-    
     // check the uniqness
     User.findOne({nickname: spec.nickname}, function(err, user) {
       if (err) {
