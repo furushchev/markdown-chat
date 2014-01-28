@@ -110,7 +110,7 @@ Say.prototype.renderMarkdown = function(user_id) {
   console.log(self.user_id);
   if (self.markdown) {
     var defered = Q.defer();
-    if (user_id.toString() === self.user_id.toString()) {
+    if (user_id && self.user && user_id.toString() === self.user.toString()) {
       var rendered_html = self.renderMeWithEJS();
     }
     else {

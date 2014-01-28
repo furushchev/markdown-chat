@@ -17,7 +17,6 @@ exports.get = function(req, res) {
         else {
             say.renderMarkdown()
                 .then(function(rendered_html) {
-                    
                     res.render("say", {
                         title: "@" + say.name + " on " + (say.date_str),
                         date: say.date,

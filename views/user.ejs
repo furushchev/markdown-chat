@@ -1,0 +1,11 @@
+<!-- user.ejs -->
+
+<% include header %>
+
+<div id="chats">
+  <% for (var i = 0; i < htmls.length; i++) { %>
+     <%- htmls[i] %>
+  <% } %>
+</div>
+
+<% include footer %>
