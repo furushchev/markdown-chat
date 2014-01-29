@@ -85,7 +85,7 @@ Say.prototype.renderWithEJS = function() {
     self.date_str = self.readableDateStr();
     // check `user is ID or object'
     return ejs.render(chat_ejs, _.extend(self, {
-      gravatar_url: gravatar.url(self.user.email)
+      gravatar_url: gravatar.url(self.user.email, {s: '100'})
     }));
   } catch(e) {
     console.log(e);
@@ -97,7 +97,7 @@ Say.prototype.renderMeWithEJS = function() {
     var self = this;
     self.date_str = self.readableDateStr();
     return ejs.render(chat_me_ejs, _.extend(self, {
-      gravatar_url: gravatar.url(self.user.email)
+      gravatar_url: gravatar.url(self.user.email, {s: '100'})
     }));
   } catch(e) {
     console.log(e);
