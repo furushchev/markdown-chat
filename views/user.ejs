@@ -1,0 +1,14 @@
+<!-- user.ejs -->
+
+<% include header %>
+<div class="page-header">
+  <h1><img src="<%- gravatar_url %>" alt="<%= user_name %>">
+      @<%= user_name %>'s posts</h1>
+</div>
+<div id="chats">
+  <% for (var i = 0; i < htmls.length; i++) { %>
+     <%- htmls[i] %>
+  <% } %>
+</div>
+
+<% include footer %>

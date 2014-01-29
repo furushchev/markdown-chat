@@ -9,8 +9,9 @@ exports.get_url = '/register';
 exports.get = function(req, res){
   var error = req.flash('error');
   res.render('register', {
-    title: config.TITLE,
-    error: error
+    title: process.env.MD_TITLE || "Markdown Chat",
+    error: error,
+    logged_in: false
   });
 };
 

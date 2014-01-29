@@ -11,6 +11,7 @@ exports.get = function(req, res) {
   
   var Say = mongoose.model("Say");
   Say.find().skip(config.PAGE_MAX * page_id).limit(config.PAGE_MAX)
+    .populate("user_id")
     .exec(function(err, says) {
       if (err != null) {
         res.send("500", 500);
@@ -35,7 +36,7 @@ exports.get = function(req, res) {
                   nickname: req.isAuthenticated() ? req.user.nickname : null,
                   says: says,
                   says_html: says_html.map(function(v) { return v.value; }),
-                  title: config.TITLE,
+                  title: process.env.MD_TITLE || "Markdown Chat",
                   count: Math.ceil(page_count),
                   index: page_id,
                   min_index: min_index,

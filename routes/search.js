@@ -10,6 +10,7 @@ exports.post = function(req, res) {
   // this is naive implmentation
   mongoose.model("Say")
     .find()
+    .populate("user")
     .exec(function(err, all_says) {
       var matched_says = _.remove(all_says, function(say) {
         var text = say.raw_markdown;
@@ -31,7 +32,7 @@ exports.post = function(req, res) {
             says: matched_says,
             says_html: says_html.map(function(v) { return v.value}),
             //title: "search result of \"" + query + "\": matched " + matched_says.length,
-            title: config.TITLE,
+            title: process.env.MD_TITLE || "Markdown Chat",
             query: query,
             logged_in: req.isAuthenticated(),
             nickname: req.isAuthenticated() ? req.user.nickname : null,

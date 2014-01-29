@@ -5,8 +5,9 @@ exports.get_url = '/login';
 
 exports.get = function(req, res) {
   res.render('login', {
-    title: config.TITLE,
-    error: req.flash('error')
+    title: process.env.MD_TITLE || "Markdown Chat",
+    error: req.flash('error'),
+    logged_in: false
   });
 };
 

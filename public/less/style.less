@@ -1,25 +1,106 @@
+.triangle-bubble-base (@width) {
+    position: absolute;
+    top: 11px;
+    width: 0;
+    height: 0;
+    border: @width solid transparent;
+    display: block;
+    content: " ";
+    pointer-events: none;
+}
+
 .say-wrapper {
-    background-color: rgb(238, 238, 238);
-    padding: 3px;
+    //background-color: rgb(238, 238, 238);
+    position: relative;
+    //padding: 3px;
     margin-bottom: 10px;
+    @padding-size: 40px;
+    @slide-width: 15px;
+    .gravatar-chat-image {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        top: 5px;
+        img {
+            width: 30px;
+            height: 30px;
+        }
+        &.left {
+            left: 0;
+        }
+        &.right {
+            right: 0;
+        }
+    }
+    .left-bubble {
+        position: relative;
+        margin-left: @padding-size;
+        &:before {
+            .triangle-bubble-base(8px);
+            border-right: 8px solid rgb(191, 204, 209);
+            left: -@slide-width;
+            right: 100%;
+        }
+        &:after {
+            margin-top: 1px;
+            margin-left: 2px;
+            .triangle-bubble-base(7px);
+            border-right: 7px solid #f2f8fa;
+            left: -@slide-width;
+            right: 100%;
+        }
+    }
+
+    .right-bubble {
+        position: relative;
+        margin-right: @padding-size;
+        &:before {
+            .triangle-bubble-base(8px);
+            border-left: 8px solid rgb(191, 204, 209);
+            right: -@slide-width;
+        }
+        &:after {
+            margin-top: 1px;
+            margin-right: 2px;
+            .triangle-bubble-base(7px);
+            border-left: 7px solid #f2f8fa;
+            right: -@slide-width;
+        }
+    }
+    
 }
 
   .say {
-      border: 1px solid rgb(202, 202, 202);
-      
+      //border: 1px solid rgb(202, 202, 202);
+      background-color: rgba(65,131,196,0.4);
+      border: 1px solid #ddd;
+      border-radius: 4px;
   }
 
     .say-header {
-        background-image: linear-gradient(rgb(248, 248, 248), rgb(225, 225, 225));
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        //background-image: linear-gradient(rgb(248, 248, 248), rgb(225, 225, 225));
+        background-color: #f2f8fa;
         padding-top: 10px;
         padding-bottom: 10px;
         padding-left: 10px;
         padding-right: 10px;
+        color: #8e9597;
+        border-bottom: 1px solid #ddd;
     }
-      .author {
+    .author {
           font-weight: bold;
+          a {
+              color: #8e9597;
+              &:hover {
+                  color: #428bca;
+              }
+          }
       }
     .say-content {
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
         background-color: white;
         padding-top: 10px;
         padding-bottom: 5px;
@@ -74,4 +155,191 @@
 
 .login-form {
     margin-top: 10px;
+}
+
+// overwrite github.css
+nav ul li {
+    margin: 0;
+    line-height: 50px;
+    &.login-status {
+        color: rgb(150, 150, 150);
+    }
+}
+
+#top-level-container {
+    margin-top: 40px;
+}
+
+// loading
+#floatingCirclesG{
+    position:relative;
+    width:60px;
+    height:60px;
+    -moz-transform:scale(0.6);
+    -webkit-transform:scale(0.6);
+    -ms-transform:scale(0.6);
+    -o-transform:scale(0.6);
+    transform:scale(0.6);
+}
+
+.f_circleG{
+    position:absolute;
+    background-color:#FFFFFF;
+    height:11px;
+    width:11px;
+    -moz-border-radius:5px;
+    -moz-animation-name:f_fadeG;
+    -moz-animation-duration:1.04s;
+    -moz-animation-iteration-count:infinite;
+    -moz-animation-direction:linear;
+    -webkit-border-radius:5px;
+    -webkit-animation-name:f_fadeG;
+    -webkit-animation-duration:1.04s;
+    -webkit-animation-iteration-count:infinite;
+    -webkit-animation-direction:linear;
+    -ms-border-radius:5px;
+    -ms-animation-name:f_fadeG;
+    -ms-animation-duration:1.04s;
+    -ms-animation-iteration-count:infinite;
+    -ms-animation-direction:linear;
+    -o-border-radius:5px;
+    -o-animation-name:f_fadeG;
+    -o-animation-duration:1.04s;
+    -o-animation-iteration-count:infinite;
+    -o-animation-direction:linear;
+    border-radius:5px;
+    animation-name:f_fadeG;
+    animation-duration:1.04s;
+    animation-iteration-count:infinite;
+    animation-direction:linear;
+}
+
+#frotateG_01{
+    left:0;
+    top:25px;
+    -moz-animation-delay:0.39s;
+    -webkit-animation-delay:0.39s;
+    -ms-animation-delay:0.39s;
+    -o-animation-delay:0.39s;
+    animation-delay:0.39s;
+}
+
+#frotateG_02{
+    left:7px;
+    top:7px;
+    -moz-animation-delay:0.52s;
+    -webkit-animation-delay:0.52s;
+    -ms-animation-delay:0.52s;
+    -o-animation-delay:0.52s;
+    animation-delay:0.52s;
+}
+
+#frotateG_03{
+    left:25px;
+    top:0;
+    -moz-animation-delay:0.65s;
+    -webkit-animation-delay:0.65s;
+    -ms-animation-delay:0.65s;
+    -o-animation-delay:0.65s;
+    animation-delay:0.65s;
+}
+
+#frotateG_04{
+    right:7px;
+    top:7px;
+    -moz-animation-delay:0.78s;
+    -webkit-animation-delay:0.78s;
+    -ms-animation-delay:0.78s;
+    -o-animation-delay:0.78s;
+    animation-delay:0.78s;
+}
+
+#frotateG_05{
+    right:0;
+    top:25px;
+    -moz-animation-delay:0.91s;
+    -webkit-animation-delay:0.91s;
+    -ms-animation-delay:0.91s;
+    -o-animation-delay:0.91s;
+    animation-delay:0.91s;
+}
+
+#frotateG_06{
+    right:7px;
+    bottom:7px;
+    -moz-animation-delay:1.04s;
+    -webkit-animation-delay:1.04s;
+    -ms-animation-delay:1.04s;
+    -o-animation-delay:1.04s;
+    animation-delay:1.04s;
+}
+
+#frotateG_07{
+    left:25px;
+    bottom:0;
+    -moz-animation-delay:1.17s;
+    -webkit-animation-delay:1.17s;
+    -ms-animation-delay:1.17s;
+    -o-animation-delay:1.17s;
+    animation-delay:1.17s;
+}
+
+#frotateG_08{
+    left:7px;
+    bottom:7px;
+    -moz-animation-delay:1.3s;
+    -webkit-animation-delay:1.3s;
+    -ms-animation-delay:1.3s;
+    -o-animation-delay:1.3s;
+    animation-delay:1.3s;
+}
+
+@-moz-keyframes f_fadeG{
+    0%{
+        background-color:#05F0B5}
+
+    100%{
+        background-color:#FFFFFF}
+
+}
+
+@-webkit-keyframes f_fadeG{
+    0%{
+        background-color:#05F0B5}
+
+    100%{
+        background-color:#FFFFFF}
+
+}
+
+@-ms-keyframes f_fadeG{
+    0%{
+        background-color:#05F0B5}
+
+    100%{
+        background-color:#FFFFFF}
+
+}
+
+@-o-keyframes f_fadeG{
+    0%{
+        background-color:#05F0B5}
+
+    100%{
+        background-color:#FFFFFF}
+
+}
+
+@keyframes f_fadeG{
+    0%{
+        background-color:#05F0B5}
+
+    100%{
+        background-color:#FFFFFF}
+
+}
+
+#loading-area {
+    width: 64px;
+    margin: 0 auto;
 }
