@@ -4,16 +4,21 @@ $(function(){
     $("html,body").animate({scrollTop: document.body.scrollHeight}, "slow");
   };
 
+  var sendingp = false;
   function sendFormData() {
-    var name = $('#namae');
-    var message = $('#message');
-    var sendData = {
-      "name": name.val(),
-      "msg": message.val(),
-    };
-    socket.emit('msg send', sendData);
-    // $.cookie("name", name.val()); // store the name value
-    message.val('');        // clear message
+    if (!sendingp) {
+      sendingp = true;
+      var name = $('#namae');
+      var message = $('#message');
+      var sendData = {
+        "name": name.val(),
+        "msg": message.val(),
+      };
+      socket.emit('msg send', sendData);
+      // $.cookie("name", name.val()); // store the name value
+      message.val('');        // clear message
+      $("#loading-area").removeClass("hidden");
+    }
   };
   
   // check the cookie to recall name
@@ -58,6 +63,7 @@ $(function(){
     // scroll to bottom
     $data.ready(function() {
       scrollToBottomAnimated();
+      $("#loading-area").addClass("hidden");
     });
   });
 
@@ -73,7 +79,6 @@ $(function(){
         e.preventDefault();
         e.stopPropagation();
       }
-      e.returnValue = false;
       sendFormData();
     }
   });
