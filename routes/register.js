@@ -10,7 +10,8 @@ exports.get = function(req, res){
   var error = req.flash('error');
   res.render('register', {
     title: config.TITLE,
-    error: error
+    error: error,
+    logged_in: false
   });
 };
 

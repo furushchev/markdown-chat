@@ -139,6 +139,8 @@ io.sockets.on('connection', function(socket) {
         data["date"] = now;
         socket.broadcast.emit('msg push', send_data);
       }, function(err) {
+        console.log("failed to render markdown");
+        console.log(err);
       })
   });
 

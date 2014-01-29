@@ -106,8 +106,6 @@ Say.prototype.renderMarkdown = function(user_id) {
   // this is asynchronous method, so returns defered object.
   // if user_id equals to self.user_id, 
   var self = this;
-  console.log(user_id);
-  console.log(self.user_id);
   if (self.markdown) {
     var defered = Q.defer();
     if (user_id && self.user && user_id.toString() === self.user.toString()) {
@@ -131,7 +129,7 @@ Say.prototype.renderMarkdown = function(user_id) {
       })
       .then(function(githubhtml) {
         var defered = Q.defer();
-        if (user_id.toString() === self.user_id.toString()) {
+        if (user_id && self.user && user_id.toString() === self.user.toString()) {
           var rendered_html = self.renderMeWithEJS();
         }
         else {
