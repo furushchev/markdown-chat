@@ -52,6 +52,11 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
+if (process.env.MD_BASIC_USER && process.env.MD_BASIC_PASSWD) {
+  app.all("*", express.basicAuth(function(user, pass) {
+    return user == process.env.MD_BASIC_USER && pass == process.env.MD_BASIC_PASSWD;
+  }));
+}
 
 // routing
 var routes = require("./routes");
