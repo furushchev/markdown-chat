@@ -24,7 +24,7 @@ exports.get = function(req, res, next) {
         }))
           .then(function(results) {
             res.render("user", {
-              title: "MarkdownChat",
+              title: process.env.MD_TITLE || "Markdown Chat",
               logged_in: req.isAuthenticated(),
               nickname: (req.user || {}).nickname,
               user_id: (req.user || {})._id,
