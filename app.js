@@ -53,7 +53,6 @@ app.use(passport.session());
 if ('production' == app.get('env')) {
   app.use(function(req, res, next) {
     var schema = req.headers['x-forwarded-proto'];
-    console.log(schema);
     if (schema === 'https') {
       // Already https; don't do anything special.
       next();
