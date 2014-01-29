@@ -7,7 +7,7 @@ exports.get_url = "/";
 exports.get = function(req, res){
   if (req.isAuthenticated()) {
     res.render('index', {
-      title: config.TITLE,
+      title: process.env.MD_TITLE || "Markdown Chat",
       logged_in: true,
       nickname: req.user.nickname,
       user_id: req.user._id
@@ -15,7 +15,7 @@ exports.get = function(req, res){
   }
   else {
     res.render('index', {
-      title: config.TITLE,
+      title: process.env.MD_TITLE || "Markdown Chat",
       logged_in: false
     });
   }

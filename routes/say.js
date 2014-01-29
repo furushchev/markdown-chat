@@ -18,7 +18,7 @@ exports.get = function(req, res) {
             say.renderMarkdown()
                 .then(function(rendered_html) {
                     res.render("say", {
-                        title: "@" + say.name + " on " + (say.date_str),
+                        title: process.env.MD_TITLE || "Markdown Chat",
                         date: say.date,
                         html: rendered_html,
                         date_str: say.readableDateStr(),
