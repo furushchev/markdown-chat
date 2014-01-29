@@ -62,7 +62,20 @@ if (process.env.MD_BASIC_USER && process.env.MD_BASIC_PASSWD) {
    // });  
 }
 
-
+// force to use https
+if ('production' == app.get('env')) {
+  app.use(function(req, res, next) {
+    var schema = req.headers['x-forwarded-proto'];
+    if (schema === 'https') {
+      // Already https; don't do anything special.
+      next();
+    }
+    else {
+      // Redirect to https.
+      res.redirect('https://' + req.headers.host + req.url);
+    }
+  });
+}
 
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
