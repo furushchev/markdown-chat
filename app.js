@@ -13,6 +13,8 @@ var express = require('express')
 , passport = require("passport")
 , LocalStrategy = require('passport-local').Strategy
 , flash = require('connect-flash')
+, _ = require('lodash')
+, express_ex = require("./utils/express_ex")
 , $ = require("cheerio");
 
 var config = require("./config");
@@ -42,20 +44,31 @@ app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(express.cookieParser());
 app.use(express.session({ secret: 'markdown-chat-0E46CB44-0B66-4B74-AD6B-8D467D51FBC8' }));
+
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
+
+
+
+if (process.env.MD_BASIC_USER && process.env.MD_BASIC_PASSWD) {
+   app.all("*", express_ex.basicAuth(function(user, pass) {
+     return user == process.env.MD_BASIC_USER && pass == process.env.MD_BASIC_PASSWD;
+   }));
+   // app.use(function(req, res, next) {
+   //   req.basicAuthUser = req.user;
+   //   req.user = null;
+   //   next();
+   // });  
+}
+
+
+
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
-}
-
-if (process.env.MD_BASIC_USER && process.env.MD_BASIC_PASSWD) {
-  app.all("*", express.basicAuth(function(user, pass) {
-    return user == process.env.MD_BASIC_USER && pass == process.env.MD_BASIC_PASSWD;
-  }));
 }
 
 // routing
