@@ -49,19 +49,6 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
-
-
-if (process.env.MD_BASIC_USER && process.env.MD_BASIC_PASSWD) {
-   app.all("*", express_ex.basicAuth(function(user, pass) {
-     return user == process.env.MD_BASIC_USER && pass == process.env.MD_BASIC_PASSWD;
-   }));
-   // app.use(function(req, res, next) {
-   //   req.basicAuthUser = req.user;
-   //   req.user = null;
-   //   next();
-   // });  
-}
-
 // force to use https
 if ('production' == app.get('env')) {
   app.use(function(req, res, next) {
@@ -76,6 +63,18 @@ if ('production' == app.get('env')) {
       res.redirect('https://' + req.headers.host + req.url);
     }
   });
+}
+
+
+if (process.env.MD_BASIC_USER && process.env.MD_BASIC_PASSWD) {
+   app.all("*", express_ex.basicAuth(function(user, pass) {
+     return user == process.env.MD_BASIC_USER && pass == process.env.MD_BASIC_PASSWD;
+   }));
+   // app.use(function(req, res, next) {
+   //   req.basicAuthUser = req.user;
+   //   req.user = null;
+   //   next();
+   // });  
 }
 
 app.use(app.router);
