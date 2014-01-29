@@ -14,7 +14,9 @@
     position: relative;
     padding: 3px;
     margin-bottom: 10px;
+    @padding-size: 40px;
     &.left-bubble {
+        margin-left: @padding-size;
         &:before {
             .triangle-bubble-base(8px);
             border-right: 8px solid rgb(191, 204, 209);
@@ -32,6 +34,7 @@
     }
 
     &.right-bubble {
+        margin-right: @padding-size;
         &:before {
             .triangle-bubble-base(8px);
             border-left: 8px solid rgb(191, 204, 209);
