@@ -1,5 +1,6 @@
 var mongoose = require("mongoose");
 var q = require("q");
+var gravatar = require("gravatar");
 
 exports.get_url = "/user/:id";
 
@@ -15,26 +16,35 @@ exports.get = function(req, res, next) {
       next(404);
     }
     else { 
-      Say.find({user: user_id}, function(err, says) {
-        if (!says) {
-          says = [];
-        }
-        q.allSettled(says.map(function(say) {
-          return say.renderMarkdown();
-        }))
-          .then(function(results) {
-            res.render("user", {
-              title: process.env.MD_TITLE || "Markdown Chat",
-              logged_in: req.isAuthenticated(),
-              nickname: (req.user || {}).nickname,
-              user_id: (req.user || {})._id,
-              user_name: user.nickname,
-              htmls: results.map(function(r) {
-                return r.value;
-              })
+      Say.find({user: user_id})
+        .populate("user")
+        .exec(function(err, says) {
+          if (!says) {
+            says = [];
+          }
+          q.allSettled(says.map(function(say) {
+            return say.renderMarkdown();
+          }))
+            .then(function(results) {
+              if (says.length > 0) {
+                var latest_say = says[0];
+              }
+              else {
+                var latest_say = {};
+              }
+              res.render("user", {
+                title: process.env.MD_TITLE || "Markdown Chat",
+                logged_in: req.isAuthenticated(),
+                nickname: (req.user || {}).nickname,
+                user_id: (req.user || {})._id,
+                user_name: user.nickname,
+                gravatar_url: gravatar.url(latest_say.user.email, {s: '100'}),
+                htmls: results.map(function(r) {
+                  return r.value;
+                })
+              });
             });
-          });
-      });
+        });
     }
   });
 };

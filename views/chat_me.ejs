@@ -1,5 +1,11 @@
 <!-- each chat -->
 <div class="say-wrapper" id="say_<%= _id %>">
+  <div class="gravatar-chat-image right">
+    <a href="/user/<%= user._id %>">
+      <img src="<%- gravatar_url %>" alt="<% name %>"/>
+    </a>
+  </div>
+  <div class="right-bubble">
   <div class="say">
     <div class="say-header">
       <div class="row">
@@ -13,7 +19,7 @@
         </div>
         <div class="author col-md-6">
           <div class="pull-right">
-            <a href="/user/<%= user %>">@<%= name || "unknown"%></a>
+            <a href="/user/<%= user._id %>">@<%= name || "unknown"%></a>
           </div>
         </div>
       </div>
@@ -27,5 +33,6 @@
         </div>
       </div>
     </div>
+  </div>
   </div>
 </div>

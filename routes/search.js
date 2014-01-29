@@ -10,6 +10,7 @@ exports.post = function(req, res) {
   // this is naive implmentation
   mongoose.model("Say")
     .find()
+    .populate("user")
     .exec(function(err, all_says) {
       var matched_says = _.remove(all_says, function(say) {
         var text = say.raw_markdown;

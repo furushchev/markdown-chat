@@ -115,9 +115,10 @@ io.sockets.on('connection', function(socket) {
     }
     Say.find()
       .limit(config.PAGE_MAX)
+      .populate("user")
       .exec(function(err, docs) {
         socket.emit('msg open', docs.map(function(doc) {
-          if (user_id && doc.user.toString() === user_id.toString()) {
+          if (user_id && doc.user._id.toString() === user_id.toString()) {
             return {
               html: doc.renderMeWithEJS(),
               date: doc.date,
@@ -136,6 +137,7 @@ io.sockets.on('connection', function(socket) {
   });
 
   // when received message
+  var User = mongoose.model("User");
   socket.on('msg send', function(data) {
     var now = new Date(); // now
     var say = new Say({
@@ -145,21 +147,23 @@ io.sockets.on('connection', function(socket) {
       message: data.message,
       user: user_id
     });
-    say.renderMarkdown(user_id)
-      .then(function(rendered_html) {
-        var send_data = {
-          html: rendered_html,
-          date: now,
-          _id: say._id
-        };
-        socket.emit('msg push', send_data);
-        data['markdown'] = rendered_html;
-        data["date"] = now;
-        socket.broadcast.emit('msg push', send_data);
-      }, function(err) {
-        console.log("failed to render markdown");
-        console.log(err);
-      })
+    // populate user
+    Say.populate(say, {path: "user"}, function(err, say) {
+      say.renderMarkdown(user_id)
+        .then(function(rendered_html) {
+          var send_data = {
+            html: rendered_html,
+            date: now,
+            _id: say._id
+          };
+          socket.emit('msg push', send_data);
+          data['markdown'] = rendered_html;
+          data["date"] = now;
+          socket.broadcast.emit('msg push', send_data);
+        }, function(err) {
+          console.log(err);
+        })
+    });
   });
 
   // delete from database
