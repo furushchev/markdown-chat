@@ -11,6 +11,7 @@ exports.get = function(req, res) {
   
   var Say = mongoose.model("Say");
   Say.find().skip(config.PAGE_MAX * page_id).limit(config.PAGE_MAX)
+    .populate("user_id")
     .exec(function(err, says) {
       if (err != null) {
         res.send("500", 500);

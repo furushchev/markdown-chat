@@ -15,26 +15,28 @@ exports.get = function(req, res, next) {
       next(404);
     }
     else { 
-      Say.find({user: user_id}, function(err, says) {
-        if (!says) {
-          says = [];
-        }
-        q.allSettled(says.map(function(say) {
-          return say.renderMarkdown();
-        }))
-          .then(function(results) {
-            res.render("user", {
-              title: process.env.MD_TITLE || "Markdown Chat",
-              logged_in: req.isAuthenticated(),
-              nickname: (req.user || {}).nickname,
-              user_id: (req.user || {})._id,
-              user_name: user.nickname,
-              htmls: results.map(function(r) {
-                return r.value;
-              })
+      Say.find({user: user_id})
+        .populate("user")
+        .exec(function(err, says) {
+          if (!says) {
+            says = [];
+          }
+          q.allSettled(says.map(function(say) {
+            return say.renderMarkdown();
+          }))
+            .then(function(results) {
+              res.render("user", {
+                title: process.env.MD_TITLE || "Markdown Chat",
+                logged_in: req.isAuthenticated(),
+                nickname: (req.user || {}).nickname,
+                user_id: (req.user || {})._id,
+                user_name: user.nickname,
+                htmls: results.map(function(r) {
+                  return r.value;
+                })
+              });
             });
-          });
-      });
+        });
     }
   });
 };

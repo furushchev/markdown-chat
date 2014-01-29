@@ -12,15 +12,33 @@
 .say-wrapper {
     //background-color: rgb(238, 238, 238);
     position: relative;
-    padding: 3px;
+    //padding: 3px;
     margin-bottom: 10px;
     @padding-size: 40px;
-    &.left-bubble {
+    @slide-width: 15px;
+    .gravatar-chat-image {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        top: 5px;
+        img {
+            width: 30px;
+            height: 30px;
+        }
+        &.left {
+            left: 0;
+        }
+        &.right {
+            right: 0;
+        }
+    }
+    .left-bubble {
+        position: relative;
         margin-left: @padding-size;
         &:before {
             .triangle-bubble-base(8px);
             border-right: 8px solid rgb(191, 204, 209);
-            left: -12px;
+            left: -@slide-width;
             right: 100%;
         }
         &:after {
@@ -28,24 +46,25 @@
             margin-left: 2px;
             .triangle-bubble-base(7px);
             border-right: 7px solid #f2f8fa;
-            left: -12px;
+            left: -@slide-width;
             right: 100%;
         }
     }
 
-    &.right-bubble {
+    .right-bubble {
+        position: relative;
         margin-right: @padding-size;
         &:before {
             .triangle-bubble-base(8px);
             border-left: 8px solid rgb(191, 204, 209);
-            right: -12px;
+            right: -@slide-width;
         }
         &:after {
             margin-top: 1px;
             margin-right: 2px;
             .triangle-bubble-base(7px);
             border-left: 7px solid #f2f8fa;
-            right: -12px;
+            right: -@slide-width;
         }
     }
     

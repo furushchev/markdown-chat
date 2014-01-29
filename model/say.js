@@ -6,6 +6,8 @@ var mongoose = require("mongoose")
 , Q = require("q")
 , $ = require("cheerio")
 , ejs = require("ejs")
+, gravatar = require("gravatar")
+, _ = require("lodash")
 , fs = require("fs");
 
 var Schema = mongoose.Schema;
@@ -81,7 +83,10 @@ Say.prototype.renderWithEJS = function() {
   try {
     var self = this;
     self.date_str = self.readableDateStr();
-    return ejs.render(chat_ejs, self);
+    // check `user is ID or object'
+    return ejs.render(chat_ejs, _.extend(self, {
+      gravatar_url: gravatar.url(self.user.email)
+    }));
   } catch(e) {
     console.log(e);
   }
@@ -91,7 +96,9 @@ Say.prototype.renderMeWithEJS = function() {
   try {
     var self = this;
     self.date_str = self.readableDateStr();
-    return ejs.render(chat_me_ejs, self);
+    return ejs.render(chat_me_ejs, _.extend(self, {
+      gravatar_url: gravatar.url(self.user.email)
+    }));
   } catch(e) {
     console.log(e);
   }
@@ -108,7 +115,7 @@ Say.prototype.renderMarkdown = function(user_id) {
   var self = this;
   if (self.markdown) {
     var defered = Q.defer();
-    if (user_id && self.user && user_id.toString() === self.user.toString()) {
+    if (user_id && self.user && user_id.toString() === self.user._id.toString()) {
       var rendered_html = self.renderMeWithEJS();
     }
     else {
@@ -129,7 +136,7 @@ Say.prototype.renderMarkdown = function(user_id) {
       })
       .then(function(githubhtml) {
         var defered = Q.defer();
-        if (user_id && self.user && user_id.toString() === self.user.toString()) {
+        if (user_id && self.user && user_id.toString() === self.user._id.toString()) {
           var rendered_html = self.renderMeWithEJS();
         }
         else {
