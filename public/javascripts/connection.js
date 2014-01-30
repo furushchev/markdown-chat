@@ -45,6 +45,8 @@ MDChatConnection.prototype.open = function() {
         });
       }
       var $data = say.appendTo($("#chats"), self);
+      var sound = new Audio("/sounds/new_message.mp3");
+      sound.play();
       // scroll to bottom
       $data.ready(function() {
         $("html,body").animate({scrollTop: document.body.scrollHeight}, "slow");
