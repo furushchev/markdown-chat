@@ -35,13 +35,6 @@ $(function(){
     });
   });
 
-  $('#delete').click(function(){
-    if(window.confirm("Are you sure?") == true) {
-      socket.emit('deleteDB');
-      $('#chats').empty();
-    }
-  });
-
   socket.on('msg open', function(data) {
     if(data.length == 0) {
       console.log("nothing to load.");
@@ -50,7 +43,7 @@ $(function(){
       $('#chats').empty(); // ensure to clear #chats
       $.each(data, function(key, value) {
         var say = new Say(value);
-        say.appendTo($("#chats"));
+        say.appendTo($("#chats"), socket);
         //$('#chats').append(value.html);
       });
     }
@@ -64,6 +57,11 @@ $(function(){
       scrollToBottomAnimated();
       $("#loading-area").addClass("hidden");
     });
+  });
+
+  socket.on('msg delete-one', function(data) {
+    var say_id = data.say_id;
+    $("#say_" + say_id).remove();
   });
 
   

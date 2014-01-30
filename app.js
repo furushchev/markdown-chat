@@ -179,10 +179,30 @@ io.sockets.on('connection', function(socket) {
   });
 
   // delete from database
-  socket.on('deleteDB', function() {
-    socket.emit('db drop');
-    socket.broadcast.emit('db drop');
-    Say.find().remove();
+  socket.on('msg delete', function(data) {
+    var say_id = data.say_id;
+    if (say_id) {
+      Say.findById(say_id, function(err, say) {
+        if (err) {
+          console.log("[msg delete] failed to find say");
+        }
+        else if (!say) {
+          console.log("[msg delete] cannod find say");
+        }
+        else {
+          say.remove(function(err) {
+            if (err) {
+              console.log("[msg delete] failed to remove say object");
+            }
+            else {
+              socket.broadcast.emit('msg delete-one', {say_id: say_id});
+            }
+          });
+        }
+      });
+    }
+    //console.log("msg delete");
+    //console.log(data);
   });
 
   socket.on('disconnect', function() {

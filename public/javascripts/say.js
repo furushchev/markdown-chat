@@ -38,8 +38,27 @@ Say.prototype.updateDateFormat = function() {
   $("#say_" + this._id).find(".date-sentence").html(this.dateFormat());
 };
 
-Say.prototype.appendTo = function($content) {
+Say.prototype.registerCallback = function($data, socket) {
+  var self = this;
+  $data.find(".say-delete-button").click(function(e) {
+    e.preventDefault();
+    if (window.confirm("Are you sure to remove this message?")) {
+      socket.emit("msg delete", {
+        say_id: self._id
+      });
+      self.remove();
+    }
+  });
+};
+
+
+Say.prototype.remove = function() {
+  $("#say_" + this._id).remove();
+};
+
+Say.prototype.appendTo = function($content, socket) {
   var $data = $(this.html);
+  this.registerCallback($data, socket);
   var date_str = this.date.getFullYear() + "/"
     + (this.date.getMonth() + 1) + "/"
     + (this.date.getDate()) + " "
