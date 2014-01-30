@@ -30,7 +30,20 @@ MDChatConnection.prototype.open = function() {
   }
   if (!self.not_use_push) {
     self.registerCallback("msg push", function(data) {
-      var say = new Say(data);
+      if (!self.user_id || self.user_id.toString() !== data.user_id.toString()) {
+        var say = new Say({
+          html: data.other_html,
+          date: data.date,
+          _id: data._id
+        });
+      }
+      else {
+        var say = new Say({
+          html: data.me_html,
+          date: data.date,
+          _id: data._id
+        });
+      }
       var $data = say.appendTo($("#chats"), self);
       // scroll to bottom
       $data.ready(function() {
