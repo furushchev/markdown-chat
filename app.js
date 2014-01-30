@@ -14,6 +14,7 @@ var express = require('express')
 , LocalStrategy = require('passport-local').Strategy
 , flash = require('connect-flash')
 , _ = require('lodash')
+, Q = require("q")
 , express_ex = require("./utils/express_ex")
 , $ = require("cheerio");
 
@@ -162,19 +163,26 @@ io.sockets.on('connection', function(socket) {
     // populate user
     Say.populate(say, {path: "user"}, function(err, say) {
       say.renderMarkdown(user_id)
-        .then(function(rendered_html) {
-          var send_data = {
-            html: rendered_html,
-            date: now,
-            _id: say._id
-          };
-          socket.emit('msg push', send_data);
-          data['markdown'] = rendered_html;
-          data["date"] = now;
-          socket.broadcast.emit('msg push', send_data);
-        }, function(err) {
-          console.log(err);
+        .then(function(me_html) {
+          say.renderMarkdown()
+            .then(function(other_html) {
+              var send_data = {
+                me_html: me_html,
+                other_html: other_html,
+                date: now,
+                _id: say._id,
+                user_id: user_id
+              };
+              socket.emit('msg push', send_data);
+              socket.broadcast.emit('msg push', send_data);
+            })
+            .fail(function(err) {
+              console.log(err);
+            });
         })
+        .fail(function(err) {
+          console.log(err);
+        });
     });
   });
 
