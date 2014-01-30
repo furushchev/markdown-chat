@@ -110,7 +110,7 @@ routes.routes.forEach(function(r) {
 
 var Say = mongoose.model('Say');
 // settings for socket.io
-var io = require('socket.io').listen(server);
+var io = require('socket.io').listen(server, {"log level": 2});
 
 server.listen(app.get('port'), function() {
   console.log('express server listening on port ' + app.get('port'));
