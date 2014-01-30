@@ -1,10 +1,11 @@
 {
-	"name": "markdown-chat",
-	"version": "0.0.1",
-	"dependencies": {
-		"jquery.taboverride": "*",
-        "ejs": "*",
-        "less": "*",
-        "jquery.cookie": "*"
-	}
+  "name": "markdown-chat",
+  "version": "0.0.1",
+  "dependencies": {
+    "jquery.taboverride": "*",
+    "ejs": "*",
+    "less": "*",
+    "jquery.cookie": "*",
+    "lodash": "*"
+  }
 }
