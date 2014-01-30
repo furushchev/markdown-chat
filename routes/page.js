@@ -5,19 +5,19 @@ var config = require("../config");
 var Q = require("q");
 exports.get_url = "/page/:page_id";
 
-exports.get = function(req, res) {
+exports.get = function(req, res, next) {
   var page_id = parseInt(req.params.page_id, 10);
   if (!page_id) page_id = 0;
   
   var Say = mongoose.model("Say");
   Say.find().skip(config.PAGE_MAX * page_id).limit(config.PAGE_MAX)
-    .populate("user_id")
+    .populate("user")
     .exec(function(err, says) {
       if (err != null) {
-        res.send("500", 500);
+        next(500);
       }
       else if (says.length == 0) {
-        res.send("404", 404);
+        next();
       }
       else {
         Say.countObject()
@@ -27,9 +27,8 @@ exports.get = function(req, res) {
             var page_count = Math.ceil(count / pager_length);
             var min_index = page_id - pager_length > 0 ? page_id - pager_length: 0;
             var max_index = page_id + pager_length < page_count ? page_id + pager_length: page_count - 1;
-            console.log(min_index);
-            console.log(max_index);
-            Q.allSettled(says.map(function(say) { return say.renderMarkdown(); }))
+            var user_id = req.user || null;
+            Q.allSettled(says.map(function(say) { return say.renderMarkdown(user_id); }))
               .then(function(says_html) {
                 res.render("page", {
                   logged_in: req.isAuthenticated(),
@@ -42,6 +41,9 @@ exports.get = function(req, res) {
                   min_index: min_index,
                   max_index: max_index,
                 });
+              })
+              .fail(function(err) {
+                next(err);
               });
           });
       }
