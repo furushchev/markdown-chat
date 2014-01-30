@@ -40,11 +40,12 @@ exports.post = function(req, res, nex) {
     res.redirect('/register');
   }
   else {
-    User.newUser({
+    var user = new User({
       nickname: nickname,
       password: pass,
       email: email
-    }, function(error, user) {
+    });
+    user.save(function(error) {
       if (error) {
         req.flash('error', error.message);
         res.redirect('/register');

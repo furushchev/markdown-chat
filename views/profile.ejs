@@ -1,0 +1,64 @@
+<% include header %>
+
+<div class="page-header">
+  <h1><img src="<%- gravatar_url %>" alt="<%= nickname %>">
+      @<%= nickname %>'s profile</h1>
+  <p>
+    Your id is <%= user._id %>
+  </p>
+</div>
+
+<% if (error && error.length > 0) { %>
+<div class="alert alert-danger alert-dismissable">
+  <button type="button" class="close"
+          data-dismiss="alert" aria-hidden="true">&times;</button>
+  <strong>Error!</strong> <%= error %>
+</div>
+
+<% } %>
+
+<div class="content">
+  <form role="form" class="form-horizontal" method="post">
+    <div class="form-group">
+      <label for="nickname-input" class="col-sm-2">nickname</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="nickname-input" placeholder="Enter nickname" value="<%= user.nickname %>" name="nickname">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="email-input" class="col-sm-2">email</label>
+      <div class="col-sm-10">
+        <input type="email" class="form-control" id="email-input" placeholder="Enter email" value="<%= user.email %>" name="email">
+      </div>
+    </div>
+    <p>
+      In order to change the password, please input current password and new password twice.
+    </p>
+    <div class="form-group">
+      <label for="old-password-input" class="col-sm-2">password(old)</label>
+      <div class="col-sm-10">
+        <input type="password" class="form-control" id="old-password-input" name="old-password-input" placeholder="Enter password">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="password-input" class="col-sm-2">new password</label>
+      <div class="col-sm-10">
+        <input type="password" class="form-control" id="password-input" name="password-input" placeholder="Enter password">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="re-password-input" class="col-sm-2">Re-enter new password</label>
+      <div class="col-sm-10">
+        <input type="password" class="form-control" id="re-password-input" name="re-password-input" placeholder="Enter password">
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>    
+    </div>
+  </form>
+</div>
+
+<% include footer %>
