@@ -139,6 +139,7 @@ io.sockets.on('connection', function(socket) {
       }
     });
   }
+  
   pushActiveUsers();
   socket.on('disconnect', function() {
     if (user_id) {
@@ -158,26 +159,31 @@ io.sockets.on('connection', function(socket) {
         pushActiveUsers();
       }
     }
-    Say.find()
-      .limit(config.PAGE_MAX)
-      .populate("user")
-      .exec(function(err, docs) {
-        socket.emit('msg open', docs.map(function(doc) {
-          if (user_id && doc.user._id.toString() === user_id.toString()) {
-            return {
-              html: doc.renderMeWithEJS(),
-              date: doc.date,
-              _id: doc._id
-            };
-          }
-          else {
-            return {
-              html: doc.renderWithEJS(),
-              date: doc.date,
-              _id: doc._id
-            };
-          }
-        }));
+    Say.countObject()
+      .then(function(say_count) {
+        Say.find()
+          .sort([['date', "ascending"]])
+          .skip(Math.max(say_count - config.PAGE_MAX, 0))
+          .limit(config.PAGE_MAX)
+          .populate("user")
+          .exec(function(err, docs) {
+            socket.emit('msg open', docs.map(function(doc) {
+              if (user_id && doc.user._id.toString() === user_id.toString()) {
+                return {
+                  html: doc.renderMeWithEJS(),
+                  date: doc.date,
+                  _id: doc._id
+                };
+              }
+              else {
+                return {
+                  html: doc.renderWithEJS(),
+                  date: doc.date,
+                  _id: doc._id
+                };
+              }
+            }));
+          });
       });
   });
 
