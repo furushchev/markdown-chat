@@ -38,7 +38,7 @@ exports.get = function(req, res, next) {
                 nickname: (req.user || {}).nickname,
                 user_id: (req.user || {})._id,
                 user_name: user.nickname,
-                gravatar_url: gravatar.url(latest_say.user.email, {s: '100'}),
+                gravatar_url: latest_say.user.getIconURL(),
                 htmls: results.map(function(r) {
                   return r.value;
                 })
