@@ -10,11 +10,7 @@ $(function(){
       sendingp = true;
       var name = $('#namae');
       var message = $('#message');
-      var sendData = {
-        "name": name.val(),
-        "msg": message.val(),
-      };
-      socket.emit('msg send', sendData);
+      connection.postMessage(name.val(), message.val());
       // $.cookie("name", name.val()); // store the name value
       message.val('');        // clear message
       $("#loading-area").removeClass("hidden");
@@ -25,45 +21,9 @@ $(function(){
   // if ($.cookie("name")) {
   //   $('input[name="namae"]').val($.cookie("name"));
   // }
-
-  var socket = io.connect(location.href);
-
-  socket.on('connect', function() {
-    // sending login information
-    socket.emit('msg update', {
-      user_id: LOGIN_USER_ID
-    });
-  });
-
-  socket.on('msg open', function(data) {
-    if(data.length == 0) {
-      console.log("nothing to load.");
-      return;
-    } else {
-      $('#chats').empty(); // ensure to clear #chats
-      $.each(data, function(key, value) {
-        var say = new Say(value);
-        say.appendTo($("#chats"), socket);
-        //$('#chats').append(value.html);
-      });
-    }
-  });         
-
-  socket.on('msg push', function(data) {
-    var say = new Say(data);
-    var $data = say.appendTo($("#chats"));
-    // scroll to bottom
-    $data.ready(function() {
-      scrollToBottomAnimated();
-      $("#loading-area").addClass("hidden");
-    });
-  });
-
-  socket.on('msg delete-one', function(data) {
-    var say_id = data.say_id;
-    $("#say_" + say_id).remove();
-  });
-
+  var connection = new MDChatConnection({user_id: LOGIN_USER_ID,
+                                         not_use_open: false});
+  connection.open();
   
   // need jquery.taboverride
   $('textarea').tabOverride(true);

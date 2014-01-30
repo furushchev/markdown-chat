@@ -78,16 +78,8 @@
       </div>
     </div>
   </div>
-  <% if (logged_in) { %>
-  <script>
-    var LOGIN_USER_ID = "<%- user_id %>";
-  </script>
-  <% } else { %>
-  <script>
-    var LOGIN_USER_ID = false;
-  </script>
-  <% } %>
   <!-- <button id="delete" class="btn btn-danger btn-sm">履歴削除</button> -->
 </div>
 
+<% locals.JS_FILES = ["/javascripts/index.js"]; %>
 <% include footer %>
