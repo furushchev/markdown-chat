@@ -40,7 +40,6 @@ MDChatConnection.prototype.open = function() {
     });
   }
   self.registerCallback('msg delete-one', function(data) {
-    console.log("delete one");
     var say_id = data.say_id;
     $("#say_" + say_id).remove();
   });
