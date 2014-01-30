@@ -29,6 +29,7 @@ MDChatConnection.prototype.open = function() {
     });
   }
   if (!self.not_use_push) {
+    var sound = new Audio("/sounds/new_message.mp3");
     self.registerCallback("msg push", function(data) {
       if (!self.user_id || self.user_id.toString() !== data.user_id.toString()) {
         var say = new Say({
@@ -45,7 +46,6 @@ MDChatConnection.prototype.open = function() {
         });
       }
       var $data = say.appendTo($("#chats"), self);
-      var sound = new Audio("/sounds/new_message.mp3");
       sound.play();
       // scroll to bottom
       $data.ready(function() {
