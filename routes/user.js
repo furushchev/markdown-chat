@@ -8,6 +8,10 @@ exports.get = function(req, res, next) {
   var user_id = req.params.id;
   var Say = mongoose.model("Say");
   var User = mongoose.model("User");
+  var my_user_id = null;
+  if (req.isAuthenticated()) {
+    my_user_id = req.user._id;
+  }
   User.findById(user_id, function(err, user) {
     if (err != null) {
       next(err);
@@ -23,7 +27,7 @@ exports.get = function(req, res, next) {
             says = [];
           }
           q.allSettled(says.map(function(say) {
-            return say.renderMarkdown();
+            return say.renderMarkdown(my_user_id);
           }))
             .then(function(results) {
               if (says.length > 0) {

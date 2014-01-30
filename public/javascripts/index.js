@@ -35,7 +35,6 @@ $(function(){
     });
   });
 
-
   $('#delete').click(function(){
     if(window.confirm("Are you sure?") == true) {
       socket.emit('deleteDB');
