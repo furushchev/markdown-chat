@@ -24,20 +24,25 @@ mongoose.model('User', UserSchema);
 
 var User = mongoose.model('User');
 
-User.checkNicknameUniqness = function(nickname) {
+User.checkNicknameUniqness = function(nickname, skip) {
   // returns q object
   var defered = Q.defer();
-  User.findOne({nickname: nickname}, function(err, user) {
-    if (err) {
-      defered.reject(err);
-    }
-    else if (user) {
-      defered.reject(new Error("nickname is not uniq: " + nickname));
-    }
-    else {
-      defered.resolve(true);
-    }
-  });
+  if (!skip) {
+    User.findOne({nickname: nickname}, function(err, user) {
+      if (err) {
+        defered.reject(err);
+      }
+      else if (user) {
+        defered.reject(new Error("nickname is not uniq: " + nickname));
+      }
+      else {
+        defered.resolve(true);
+      }
+    });
+  }
+  else {
+    defered.resolve(true);
+  }
   return defered.promise;
 };
 
@@ -69,8 +74,9 @@ UserSchema.pre('save', function(next) {
     return next(new Error("need to specify password"));
   }
   else {
-    return User.checkNicknameUniqness(user.nickname)
-      .then(function(uniqp) {
+    return User.checkNicknameUniqness(user.nickname,
+                                      !user.isModified("nickname"))
+      .then(function() {
         if (user.isModified("password")) {
           bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
             if(err) return next(err);

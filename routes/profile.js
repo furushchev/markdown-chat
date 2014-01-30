@@ -40,6 +40,35 @@ exports.post = function(req, res) {
       req.user.nickname = nickname;
       req.user.email = email;
       if (pass && repass && pass.length > 0 && repass.length > 0) {
+        // changing pass
+        req.user.comparePassword(old_pass, function(err, matchp) {
+          if (err) {
+            req.flash("error", err.message);
+            res.redirect("/profile");
+          }
+          if (!matchp) {
+            req.flash("error", "password(old) does not match with current password");
+            res.redirect("/profile");            
+          }
+          else {
+            if (pass.toString() !== repass.toString()) {
+              req.flash("error", "does not match password and reentered password");
+              res.redirect("/profile");
+            }
+            else {
+              req.user.password = pass;
+              req.user.save(function(err) {
+                if (err) {
+                  req.flash("error", err.message);
+                  res.redirect("/profile");
+                }
+                else {
+                  res.redirect("/profile");
+                }
+              });
+            }
+          }
+        });
       }
       else {
         req.user.save(function(err) {
