@@ -5,19 +5,19 @@ $(function(){
   };
 
   function sendFormData() {
-    sendingp = true;
     var name = $('#namae');
     var message = $('#message');
-    connection.postMessage(name.val(), message.val());
-    // $.cookie("name", name.val()); // store the name value
+    if (message.val().replace(/\s*/g, '').length !== 0) {
+      connection.postMessage(name.val(), message.val());
+      $("#loading-area").removeClass("hidden");
+    }
     message.val('');        // clear message
-    $("#loading-area").removeClass("hidden");
   };
   
   var connection = new MDChatConnection({user_id: LOGIN_USER_ID,
                                          not_use_open: false});
   connection.open();
-  
+  connection.startActiveUserTimer();
   // need jquery.taboverride
   $('textarea').tabOverride(true);
   $('#btn').click(sendFormData);
