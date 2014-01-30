@@ -120,30 +120,34 @@ server.listen(app.get('port'), function() {
 var clients = [];
 io.sockets.on('connection', function(socket) {
   var user_id = null;
-    
-  console.log(clients.length + " clients");
-  socket.on('disconnect', function() {
-    if (user_id) {
-      clients.splice(clients.indexOf(user_id), 1);
-      console.log(clients.length + " clients");
-    }
-  });
-
-  socket.on('users active', function() {
+  var User = mongoose.model("User");
+  var pushActiveUsers = function() {
     var active_user_ids = _(clients).filter().uniq().value();
+
     User.find({_id: {$in: active_user_ids}}, function(err, users) {
       if (err != null) {
         console.log(err);
       }
       else {
-        socket.emit('users active', {
+        var data = {
           users: _.map(users, function(u) {
             return {name: u.nickname, url: u.getIconURL(), id: u._id};
           })
-        });
+        };
+        socket.broadcast.emit('users active', data);
+        socket.emit('users active', data);
       }
     });
+  }
+  pushActiveUsers();
+  socket.on('disconnect', function() {
+    if (user_id) {
+      clients.splice(clients.indexOf(user_id), 1);
+      console.log(clients.length + " clients");
+    }
+    pushActiveUsers();
   });
+
   
   // 初回接続時の履歴取得
   socket.on('msg update', function(msg) {
@@ -151,6 +155,7 @@ io.sockets.on('connection', function(socket) {
       if (msg['user_id']) {
         user_id = msg['user_id'];
         clients.push(user_id);
+        pushActiveUsers();
       }
     }
     Say.find()
@@ -177,7 +182,7 @@ io.sockets.on('connection', function(socket) {
   });
 
   // when received message
-  var User = mongoose.model("User");
+  
   socket.on('msg send', function(data) {
     var now = new Date(); // now
     var say = new Say({

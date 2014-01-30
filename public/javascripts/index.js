@@ -17,7 +17,6 @@ $(function(){
   var connection = new MDChatConnection({user_id: LOGIN_USER_ID,
                                          not_use_open: false});
   connection.open();
-  connection.startActiveUserTimer();
   // need jquery.taboverride
   $('textarea').tabOverride(true);
   $('#btn').click(sendFormData);

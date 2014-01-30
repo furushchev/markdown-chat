@@ -61,24 +61,27 @@ MDChatConnection.prototype.open = function() {
   var previous_login_users = [];
   self.registerCallback('users active', function(data) {
     var user_data = data.users;
-    // check the user_data is updated or not...
-    if(_.difference(_.map(user_data, function(u) {
+    var current_ids = _.map(user_data, function(u) {
       return u.id;
-    }), _.map(previous_login_users, function(u) {
-      return u.id;
-    })).length !== 0) {
-      previous_login_users = user_data;
-    $("#active-user-image-container").empty();
-    _.forEach(user_data, function(data) {
-      $("#active-user-window").removeClass("hidden");
-      var user_name = data.name;
-      var url = data.url;
-      var user_id = data.id;
-      // inserting image with tooltip
-      var $img = $('<a href="/user/' + user_id + '" data-toggle="tooltip" title="' + user_name + '"><img src="' + url + '" alt="' + user_name + '"/></a>');
-      $("#active-user-image-container").append($img);
-      $img.tooltip();
     });
+    var previous_ids = _.map(previous_login_users, function(u) {
+      return u.id;
+    });
+    // check the user_data is updated or not...
+    if(_.difference(current_ids, previous_ids).length === 0 ||
+       _.difference(previous_ids, current_ids).length === 0) {
+      previous_login_users = user_data;
+      $("#active-user-image-container").empty();
+      _.forEach(user_data, function(data) {
+        $("#active-user-window").removeClass("hidden");
+        var user_name = data.name;
+        var url = data.url;
+        var user_id = data.id;
+        // inserting image with tooltip
+        var $img = $('<a href="/user/' + user_id + '" data-toggle="tooltip" title="' + user_name + '"><img src="' + url + '" alt="' + user_name + '"/></a>');
+        $("#active-user-image-container").append($img);
+        $img.tooltip();
+      });
     }
   });
 };
@@ -97,10 +100,3 @@ MDChatConnection.prototype.postMessage = function(name, msg) {
   self.emit('msg send', {"name": name, "msg": msg});
 };
 
-MDChatConnection.prototype.startActiveUserTimer = function() {
-  var self = this;
-  self.emit('users active');
-  setTimeout(function() {
-    self.startActiveUserTimer();
-  }, 20000);
-};
