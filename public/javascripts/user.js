@@ -6,5 +6,10 @@ $(function() {
                                          not_use_push: true
                                         });
   connection.open();
-  console.log(connection);
+  // create say objects from html
+  
+  $("#chats .say-wrapper").each(function() {
+    var say = Say.createFromHTML($(this));
+    say.registerCallback($(this), connection);
+  });
 });

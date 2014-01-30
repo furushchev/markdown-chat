@@ -14,6 +14,16 @@ function Say(spec) {
 
 Say.all_says = [];
 
+Say.createFromHTML = function($html) {
+  var say = new Say();
+  var id = $html.attr("data-say-id");
+  var date = new $html.attr("data-date");
+  say._id = id;
+  say.date = date;
+  say.html = $html.html();
+  return say;
+};
+
 Say.prototype.dateFormat = function() {
   var now = new Date();
   var diff = (now - this.date) / 1000.0; // diff in sec
