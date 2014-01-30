@@ -37,6 +37,7 @@ MDChatConnection.prototype.open = function() {
           date: data.date,
           _id: data._id
         });
+        sound.play();
       }
       else {
         var say = new Say({
@@ -46,7 +47,6 @@ MDChatConnection.prototype.open = function() {
         });
       }
       var $data = say.appendTo($("#chats"), self);
-      sound.play();
       // scroll to bottom
       $data.ready(function() {
         $("html,body").animate({scrollTop: document.body.scrollHeight}, "slow");
