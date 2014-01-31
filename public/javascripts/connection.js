@@ -9,6 +9,7 @@ MDChatConnection = function(spec) {
 
 MDChatConnection.prototype.open = function() {
   var self = this;
+  var sound = new Audio("/sounds/new_message.mp3");
   var user_id = self.user_id;
   self.socket = io.connect(location.origin);
   self.registerCallback("connect", function() {
@@ -16,6 +17,23 @@ MDChatConnection.prototype.open = function() {
     self.emit('msg update', {
       user_id: user_id
     });
+  });
+  self.registerCallback("msg changed", function(data) {
+    var html = data.html;
+    var raw_markdown = data.raw_markdown;
+    var say_id = data.say_id;
+    var $say = $("#say_" + say_id);
+    $say.find(".markdown").html(html);
+    $say.find(".raw-markdown textarea").val(raw_markdown);
+    if (!$say.find(".raw-markdown .loading").hasClass("hidden")) {
+      $say.find(".raw-markdown .loading").addClass("hidden");
+      $say.find(".raw-markdown form").removeClass("hidden");
+      $say.find(".raw-markdown").addClass("hidden");
+      $say.find(".markdown").removeClass("hidden");
+    }
+    if (!self.user_id || self.user_id.toString() !== data.user_id.toString()) {
+      sound.play();
+    }
   });
   if (!self.not_use_open) {
     self.registerCallback("msg open", function(data) {
@@ -30,7 +48,6 @@ MDChatConnection.prototype.open = function() {
     });
   }
   if (!self.not_use_push) {
-    var sound = new Audio("/sounds/new_message.mp3");
     self.registerCallback("msg push", function(data) {
       if (!self.user_id || self.user_id.toString() !== data.user_id.toString()) {
         var say = new Say({

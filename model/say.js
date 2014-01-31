@@ -103,6 +103,19 @@ Say.prototype.renderMeWithEJS = function() {
   }
 }
 
+Say.prototype.updateMarkdown = function(markdown) {
+  var self = this;
+  self.raw_markdown = markdown;
+  return Say.renderMarkdownByGithub(self.raw_markdown)
+    .then(function(githubhtml) {
+      var defered = Q.defer();
+      self.markdown = Say.forceToUseBlank(githubhtml);
+      defered.resolve(githubhtml);
+      self.save();
+      return defered.promise;
+    })
+};
+
 
 Say.prototype.renderMarkdown = function(user_id) {
   // rendering markdown into html
@@ -125,14 +138,7 @@ Say.prototype.renderMarkdown = function(user_id) {
     return defered.promise;
   }
   else {
-    return Say.renderMarkdownByGithub(self.raw_markdown)
-      .then(function(githubhtml) {
-        var defered = Q.defer();
-        self.markdown = Say.forceToUseBlank(githubhtml);
-        defered.resolve(githubhtml);
-        self.save();
-        return defered.promise;
-      })
+    return self.updateMarkdown(self.raw_markdown)
       .then(function(githubhtml) {
         var defered = Q.defer();
         if (user_id && self.user && user_id.toString() === self.user._id.toString()) {

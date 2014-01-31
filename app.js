@@ -118,7 +118,9 @@ server.listen(app.get('port'), function() {
 });
 
 var clients = [];
+var sockets = [];
 io.sockets.on('connection', function(socket) {
+  sockets.push(socket);
   var user_id = null;
   var User = mongoose.model("User");
   var pushActiveUsers = function() {
@@ -187,6 +189,45 @@ io.sockets.on('connection', function(socket) {
       });
   });
 
+  socket.on("msg edit", function(data) {
+    var say_id = data.say_id;
+    var markdown = data.markdown;
+    Say.find({_id: say_id})
+      .populate("user")
+      .exec(function(err, says) {
+        var say = null;
+        if (says.length === 1) {
+          say = says[0];
+        }
+        if (err) {
+          console.log("failed to find say object");
+          console.log(err);
+        }
+        else if (say == null) {
+          console.log("cannot find say: " + say_id);
+        }
+        else {
+          say.updateMarkdown(markdown)
+            .then(function(html) {
+              // broadcasting the message
+              sockets.forEach(function(socket) {
+                var the_user_id = socket.user_id;
+                socket.emit("msg changed", {
+                  html: html,
+                  say_id: say_id,
+                  raw_markdown: markdown,
+                  user_id: user_id
+                });
+              });
+            })
+            .fail(function(err) {
+              console.log("failed to update markdown");
+              console.log(err);
+            });
+        }
+      });
+  });
+  
   // when received message
   
   socket.on('msg send', function(data) {

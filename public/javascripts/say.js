@@ -73,15 +73,18 @@ Say.prototype.registerCallback = function($data, socket) {
       $markdown.removeClass("hidden");
     }
   });
-  $data.find(".edit-button").click(function(e) {
+  $data.find(".edit-button").parent().submit(function(e) {
     e.preventDefault();
     var $markdown = $data.find(".markdown");
     var $raw_markdown = $data.find(".raw-markdown");
     var $loading= $data.find(".loading");
-    // $raw_markdown.addClass("hidden");
     $raw_markdown.find("form").addClass("hidden");
     $loading.removeClass("hidden");
-    // $markdown.removeClass("hidden");
+    // sending message to the server
+    socket.emit("msg edit", {
+      say_id: self._id,
+      markdown: $raw_markdown.find("textarea").val()
+    });
     return false;
   });
 };
