@@ -25,7 +25,7 @@ MDChatConnection.prototype.open = function() {
           var say = new Say(value);
           say.appendTo($("#chats"), self.socket);
         });
-        $("html,body").animate({scrollTop: document.body.scrollHeight}, "slow");
+        $("html").animate({scrollTop: document.body.scrollHeight}, "slow");
       }
     });
   }

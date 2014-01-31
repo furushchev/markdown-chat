@@ -1,7 +1,7 @@
 $(function(){
 
   function scrollToBottomAnimated() {
-    $("html,body").animate({scrollTop: document.body.scrollHeight}, "slow");
+    $("html").animate({scrollTop: document.body.scrollHeight}, "slow");
   };
 
   function sendFormData() {
