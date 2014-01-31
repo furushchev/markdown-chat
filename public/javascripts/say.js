@@ -59,6 +59,31 @@ Say.prototype.registerCallback = function($data, socket) {
       self.remove();
     }
   });
+  $data.find(".say-edit-button").click(function(e) {
+    e.preventDefault();
+    var $parent = $data;
+    var $markdown = $parent.find(".markdown");
+    var $raw_markdown = $parent.find(".raw-markdown");
+    if ($raw_markdown.hasClass("hidden")) {
+      $raw_markdown.removeClass("hidden");
+      $markdown.addClass("hidden");
+    }
+    else {
+      $raw_markdown.addClass("hidden");
+      $markdown.removeClass("hidden");
+    }
+  });
+  $data.find(".edit-button").click(function(e) {
+    e.preventDefault();
+    var $markdown = $data.find(".markdown");
+    var $raw_markdown = $data.find(".raw-markdown");
+    var $loading= $data.find(".loading");
+    // $raw_markdown.addClass("hidden");
+    $raw_markdown.find("form").addClass("hidden");
+    $loading.removeClass("hidden");
+    // $markdown.removeClass("hidden");
+    return false;
+  });
 };
 
 Say.prototype.autoResizeEditZone = function($data) {
