@@ -50,11 +50,30 @@
             right: 0;
         }
     }
-    .say-delete-area {
+    .say-side-icon-area {
         position: absolute;
-        right: 10px;
-        top: 50px;
+        right: 22px;
+        top: 40px;
+        button {
+            background: transparent;
+            padding: 0;
+            cursor: pointer;
+            border: 0;
+            .glyphicon {
+                font-size: 15px;
+                color: #aaa;
+            }
+        }
+        .say-delete-area {
+            position: absolute;
+            top: 0px;
+        }
+        .say-edit-area {
+            position: absolute;
+            top: 20px;
+        }
     }
+    
     .left-bubble {
         position: relative;
         margin-left: @padding-size;
@@ -129,6 +148,26 @@
         padding-bottom: 5px;
         padding-left: 10px;
         padding-right: 10px;
+        .raw-markdown {
+            .loading {
+                width: 64px;
+                margin: 0 auto;
+            }
+            form {
+                textarea {
+                    padding-top: 5px;
+                    padding-bottom: 30px;
+                }
+                button {
+                    float: right;
+                    margin-top: 5px;
+                    background: transparent;
+                    padding: 0;
+                    cursor: pointer;
+                    border: 0;
+                }
+            }
+        }
     }
     
 .chat-input-form {
@@ -194,7 +233,7 @@ nav ul li {
 }
 
 // loading
-#floatingCirclesG{
+.floatingCirclesG{
     position:relative;
     width:60px;
     height:60px;
@@ -237,7 +276,7 @@ nav ul li {
     animation-direction:linear;
 }
 
-#frotateG_01{
+.frotateG_01{
     left:0;
     top:25px;
     -moz-animation-delay:0.39s;
@@ -247,7 +286,7 @@ nav ul li {
     animation-delay:0.39s;
 }
 
-#frotateG_02{
+.frotateG_02{
     left:7px;
     top:7px;
     -moz-animation-delay:0.52s;
@@ -257,7 +296,7 @@ nav ul li {
     animation-delay:0.52s;
 }
 
-#frotateG_03{
+.frotateG_03{
     left:25px;
     top:0;
     -moz-animation-delay:0.65s;
@@ -267,7 +306,7 @@ nav ul li {
     animation-delay:0.65s;
 }
 
-#frotateG_04{
+.frotateG_04{
     right:7px;
     top:7px;
     -moz-animation-delay:0.78s;
@@ -277,7 +316,7 @@ nav ul li {
     animation-delay:0.78s;
 }
 
-#frotateG_05{
+.frotateG_05{
     right:0;
     top:25px;
     -moz-animation-delay:0.91s;
@@ -287,7 +326,7 @@ nav ul li {
     animation-delay:0.91s;
 }
 
-#frotateG_06{
+.frotateG_06{
     right:7px;
     bottom:7px;
     -moz-animation-delay:1.04s;
@@ -297,7 +336,7 @@ nav ul li {
     animation-delay:1.04s;
 }
 
-#frotateG_07{
+.frotateG_07{
     left:25px;
     bottom:0;
     -moz-animation-delay:1.17s;
@@ -307,7 +346,7 @@ nav ul li {
     animation-delay:1.17s;
 }
 
-#frotateG_08{
+.frotateG_08{
     left:7px;
     bottom:7px;
     -moz-animation-delay:1.3s;

@@ -59,8 +59,39 @@ Say.prototype.registerCallback = function($data, socket) {
       self.remove();
     }
   });
+  $data.find(".say-edit-button").click(function(e) {
+    e.preventDefault();
+    var $parent = $data;
+    var $markdown = $parent.find(".markdown");
+    var $raw_markdown = $parent.find(".raw-markdown");
+    if ($raw_markdown.hasClass("hidden")) {
+      $raw_markdown.removeClass("hidden");
+      $markdown.addClass("hidden");
+    }
+    else {
+      $raw_markdown.addClass("hidden");
+      $markdown.removeClass("hidden");
+    }
+  });
+  $data.find(".edit-button").parent().submit(function(e) {
+    e.preventDefault();
+    var $markdown = $data.find(".markdown");
+    var $raw_markdown = $data.find(".raw-markdown");
+    var $loading= $data.find(".loading");
+    $raw_markdown.find("form").addClass("hidden");
+    $loading.removeClass("hidden");
+    // sending message to the server
+    socket.emit("msg edit", {
+      say_id: self._id,
+      markdown: $raw_markdown.find("textarea").val()
+    });
+    return false;
+  });
 };
 
+Say.prototype.autoResizeEditZone = function($data) {
+  $data.find("textarea").autosize();
+};
 
 Say.prototype.remove = function() {
   $("#say_" + this._id).remove();
@@ -73,6 +104,7 @@ Say.prototype.appendTo = function($content, socket) {
     + (this.date.getMonth() + 1) + "/"
     + (this.date.getDate()) + " "
     + (this.date.getHours()) + ":" + this.date.getMinutes();
+  this.autoResizeEditZone($data);
   $data.find(".date-sentence")
     .attr("title", date_str)
     .tooltip();

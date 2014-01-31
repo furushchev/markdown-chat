@@ -30,13 +30,47 @@
             <div class="markdown">
               <%- markdown %>
             </div>
+            <div class="raw-markdown hidden">
+              <form role="form">
+                <textarea class="form-control"><%- raw_markdown %></textarea>
+                <button type="submit" class="edit-button"><span class="glyphicon glyphicon-pencil"></span></button>
+              </form>
+              <div class="hidden loading">
+                <div class="floatingCirclesG">
+                  <div class="f_circleG frotateG_01">
+                  </div>
+                  <div class="f_circleG frotateG_02">
+                  </div>
+                  <div class="f_circleG frotateG_03">
+                  </div>
+                  <div class="f_circleG frotateG_04">
+                  </div>
+                  <div class="f_circleG frotateG_05">
+                  </div>
+                  <div class="f_circleG frotateG_06">
+                  </div>
+                  <div class="f_circleG frotateG_07">
+                  </div>
+                  <div class="f_circleG frotateG_08">
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <div class="say-side-icon-area">
   <div class="say-delete-area">
-    <button class="say-delete-button close"
-            type="button">&times;</button>
+    <button type="button" class="btn btn-default say-delete-button">
+      <span class="glyphicon glyphicon-remove"></span>
+    </button>
+  </div>
+  <div class="say-edit-area">
+    <button type="button" class="btn btn-default say-edit-button">
+      <span class="glyphicon glyphicon-edit"></span>
+    </button>
+  </div>
   </div>
 </div>

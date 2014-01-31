@@ -6,6 +6,7 @@
     "ejs": "*",
     "less": "*",
     "jquery.cookie": "*",
-    "lodash": "*"
+    "lodash": "*",
+    "jquery-autosize": "*"
   }
 }
