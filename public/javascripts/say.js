@@ -61,6 +61,9 @@ Say.prototype.registerCallback = function($data, socket) {
   });
 };
 
+Say.prototype.autoResizeEditZone = function($data) {
+  $data.find("textarea").autosize();
+};
 
 Say.prototype.remove = function() {
   $("#say_" + this._id).remove();
@@ -73,6 +76,7 @@ Say.prototype.appendTo = function($content, socket) {
     + (this.date.getMonth() + 1) + "/"
     + (this.date.getDate()) + " "
     + (this.date.getHours()) + ":" + this.date.getMinutes();
+  this.autoResizeEditZone($data);
   $data.find(".date-sentence")
     .attr("title", date_str)
     .tooltip();

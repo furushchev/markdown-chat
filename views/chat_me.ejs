@@ -27,8 +27,14 @@
       <div class="say-content">
         <div class="row">
           <div class="col-md-12">
-            <div class="markdown">
+            <div class="markdown hidden">
               <%- markdown %>
+            </div>
+            <div class="raw-markdown">
+              <form role="form">
+                <textarea class="form-control"><%- raw_markdown %></textarea>
+                <button type="submit"><span class="glyphicon glyphicon-pencil"></span></button>
+              </form>
             </div>
           </div>
         </div>
