@@ -10,7 +10,9 @@ exports.get = function(req, res, next) {
   if (!page_id) page_id = 0;
   
   var Say = mongoose.model("Say");
-  Say.find().skip(config.PAGE_MAX * page_id).limit(config.PAGE_MAX)
+  Say.find()
+    .sort([['date', 'descending']])
+    .skip(config.PAGE_MAX * page_id).limit(config.PAGE_MAX)
     .populate("user")
     .exec(function(err, says) {
       if (err != null) {
