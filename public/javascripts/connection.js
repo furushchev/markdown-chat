@@ -31,7 +31,8 @@ MDChatConnection.prototype.open = function() {
       $say.find(".raw-markdown").addClass("hidden");
       $say.find(".markdown").removeClass("hidden");
     }
-    if (!self.user_id || self.user_id.toString() !== data.user_id.toString()) {
+    if (!self.user_id || self.user_id.toString() !== data.user_id.toString()
+        && $("#volume-button .glyphicon-volume-up").length != 0) {
       sound.play();
     }
   });
@@ -55,7 +56,9 @@ MDChatConnection.prototype.open = function() {
           date: data.date,
           _id: data._id
         });
-        sound.play();
+        if ($("#volume-button .glyphicon-volume-up").length != 0) {
+          sound.play();
+        }
       }
       else {
         var say = new Say({
