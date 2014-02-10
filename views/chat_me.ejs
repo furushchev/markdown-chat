@@ -1,38 +1,76 @@
 <!-- each chat -->
-<div class="say-wrapper" id="say_<%= _id %>">
+<div class="say-wrapper" id="say_<%= _id %>"
+     data-say-id="<%= _id %>" data-date="<%= date %>">
   <div class="gravatar-chat-image right">
     <a href="/user/<%= user._id %>">
       <img src="<%- gravatar_url %>" alt="<% name %>"/>
     </a>
   </div>
   <div class="right-bubble">
-  <div class="say">
-    <div class="say-header">
-      <div class="row">
-        <div class="date col-md-6">
-          <a class="date-sentence" href="/say/<%= _id %>"
-             target="_blank"
-             data-toggle="tooltipbnnn"
-             title="<%= date_str %>">
-            <%= date_str %>
-          </a>
+    <div class="say">
+      <div class="say-header">
+        <div class="row">
+          <div class="date col-md-6">
+            <a class="date-sentence" href="/say/<%= _id %>"
+               data-toggle="tooltipbnnn"
+               title="<%= date_str %>">
+              <%= date_str %>
+            </a>
+          </div>
+          <div class="author col-md-6">
+            <div class="pull-right">
+              <a href="/user/<%= user._id %>">@<%= name || "unknown"%></a>
+            </div>
+          </div>
         </div>
-        <div class="author col-md-6">
-          <div class="pull-right">
-            <a href="/user/<%= user._id %>">@<%= name || "unknown"%></a>
+      </div>
+      <div class="say-content">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="markdown">
+              <%- markdown %>
+            </div>
+            <div class="raw-markdown hidden">
+              <form role="form">
+                <textarea class="form-control"><%- raw_markdown %></textarea>
+                <button type="submit" class="edit-button"><span class="glyphicon glyphicon-pencil"></span></button>
+              </form>
+              <div class="hidden loading">
+                <div class="floatingCirclesG">
+                  <div class="f_circleG frotateG_01">
+                  </div>
+                  <div class="f_circleG frotateG_02">
+                  </div>
+                  <div class="f_circleG frotateG_03">
+                  </div>
+                  <div class="f_circleG frotateG_04">
+                  </div>
+                  <div class="f_circleG frotateG_05">
+                  </div>
+                  <div class="f_circleG frotateG_06">
+                  </div>
+                  <div class="f_circleG frotateG_07">
+                  </div>
+                  <div class="f_circleG frotateG_08">
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="say-content">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="markdown">
-            <%- markdown %>
-          </div>
-        </div>
-      </div>
-    </div>
+  </div>
+  <div class="say-side-icon-area">
+  <div class="say-delete-area">
+    <button type="button" class="btn btn-default say-delete-button">
+      <span class="glyphicon glyphicon-remove"></span>
+    </button>
+  </div>
+  <div class="say-edit-area">
+    <button type="button" class="btn btn-default say-edit-button">
+      <span class="glyphicon glyphicon-edit"></span>
+    </button>
   </div>
   </div>
 </div>

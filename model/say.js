@@ -6,7 +6,6 @@ var mongoose = require("mongoose")
 , Q = require("q")
 , $ = require("cheerio")
 , ejs = require("ejs")
-, gravatar = require("gravatar")
 , _ = require("lodash")
 , fs = require("fs");
 
@@ -85,7 +84,7 @@ Say.prototype.renderWithEJS = function() {
     self.date_str = self.readableDateStr();
     // check `user is ID or object'
     return ejs.render(chat_ejs, _.extend(self, {
-      gravatar_url: gravatar.url(self.user.email, {s: '100'})
+      gravatar_url: self.user.getIconURL()
     }));
   } catch(e) {
     console.log(e);
@@ -97,12 +96,25 @@ Say.prototype.renderMeWithEJS = function() {
     var self = this;
     self.date_str = self.readableDateStr();
     return ejs.render(chat_me_ejs, _.extend(self, {
-      gravatar_url: gravatar.url(self.user.email, {s: '100'})
+      gravatar_url: self.user.getIconURL()
     }));
   } catch(e) {
     console.log(e);
   }
 }
+
+Say.prototype.updateMarkdown = function(markdown) {
+  var self = this;
+  self.raw_markdown = markdown;
+  return Say.renderMarkdownByGithub(self.raw_markdown)
+    .then(function(githubhtml) {
+      var defered = Q.defer();
+      self.markdown = Say.forceToUseBlank(githubhtml);
+      defered.resolve(githubhtml);
+      self.save();
+      return defered.promise;
+    })
+};
 
 
 Say.prototype.renderMarkdown = function(user_id) {
@@ -126,14 +138,7 @@ Say.prototype.renderMarkdown = function(user_id) {
     return defered.promise;
   }
   else {
-    return Say.renderMarkdownByGithub(self.raw_markdown)
-      .then(function(githubhtml) {
-        var defered = Q.defer();
-        self.markdown = Say.forceToUseBlank(githubhtml);
-        defered.resolve(githubhtml);
-        self.save();
-        return defered.promise;
-      })
+    return self.updateMarkdown(self.raw_markdown)
       .then(function(githubhtml) {
         var defered = Q.defer();
         if (user_id && self.user && user_id.toString() === self.user._id.toString()) {

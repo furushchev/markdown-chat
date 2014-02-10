@@ -11,23 +11,30 @@
     
   </div>
   <div id="loading-area" class="hidden">
-    <div id="floatingCirclesG">
-      <div class="f_circleG" id="frotateG_01">
-        </div>
-      <div class="f_circleG" id="frotateG_02">
-        </div>
-      <div class="f_circleG" id="frotateG_03">
-        </div>
-      <div class="f_circleG" id="frotateG_04">
-        </div>
-      <div class="f_circleG" id="frotateG_05">
-        </div>
-      <div class="f_circleG" id="frotateG_06">
-        </div>
-      <div class="f_circleG" id="frotateG_07">
-        </div>
-      <div class="f_circleG" id="frotateG_08">
+    <div class="floatingCirclesG">
+      <div class="f_circleG frotateG_01">
       </div>
+      <div class="f_circleG frotateG_02">
+      </div>
+      <div class="f_circleG frotateG_03">
+      </div>
+      <div class="f_circleG frotateG_04">
+      </div>
+      <div class="f_circleG frotateG_05">
+      </div>
+      <div class="f_circleG frotateG_06">
+      </div>
+      <div class="f_circleG frotateG_07">
+      </div>
+      <div class="f_circleG frotateG_08">
+      </div>
+    </div>
+  </div>
+  <div id="active-user-window" class="hidden">
+    <p>
+      Login users
+    </p>
+   <div id="active-user-image-container">
     </div>
   </div>
   <form class="form-inline chat-input-form">
@@ -78,16 +85,8 @@
       </div>
     </div>
   </div>
-  <% if (logged_in) { %>
-  <script>
-    var LOGIN_USER_ID = "<%- user_id %>";
-  </script>
-  <% } else { %>
-  <script>
-    var LOGIN_USER_ID = false;
-  </script>
-  <% } %>
   <!-- <button id="delete" class="btn btn-danger btn-sm">履歴削除</button> -->
 </div>
 
+<% locals.JS_FILES = ["/javascripts/index.js"]; %>
 <% include footer %>

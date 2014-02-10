@@ -16,9 +16,16 @@ exports.get = function(req, res) {
       }
       else {
         var say = says[0];
-        say.renderMarkdown()
+        var user_id = null;
+        if (req.isAuthenticated()) {
+          user_id = req.user._id;
+        }
+        say.renderMarkdown(user_id)
           .then(function(rendered_html) {
             res.render("say", {
+              logged_in: req.isAuthenticated(),
+              user_id: user_id,
+              nickname: (req.user || {}).nickname,
               title: process.env.MD_TITLE || "Markdown Chat",
               date: say.date,
               html: rendered_html,

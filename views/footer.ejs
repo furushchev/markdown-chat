@@ -1,14 +1,32 @@
   </div>
+
+  <% if (logged_in && locals.user_id) { %>
+  <script>
+    var LOGIN_USER_ID = "<%- user_id %>";
+  </script>
+  <% } else { %>
+  <script>
+    var LOGIN_USER_ID = false;
+  </script>
+  <% } %>
+  
   <script type="text/javascript"
           src="/bower_components/jquery/jquery.min.js"></script>
+  <script type="text/javascript"
+          src="/bower_components/jquery-autosize/jquery.autosize.min.js"></script>
   <script type="text/javascript" src="/bower_components/jquery.cookie/jquery.cookie.js"></script>
   <script type="text/javascript" src="/socket.io/socket.io.js"></script>
   <script type="text/javascript" src="/bower_components/taboverride/build/output/taboverride.min.js"></script>
   <script type="text/javascript" src="/bower_components/jquery.taboverride/build/jquery.taboverride.min.js"></script>
 
   <script type="text/javascript" src="/javascripts/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/bower_components/lodash/dist/lodash.min.js"></script>
   <script type="text/javascript" src="/javascripts/say.js"></script>
-  <script type="text/javascript" src="/javascripts/index.js"></script>
-
+  <script type="text/javascript" src="/javascripts/connection.js"></script>
+  <% if (locals.JS_FILES) { %>
+  <% for (var i = 0; i < JS_FILES.length; i++) { %>
+     <script type="text/javascript" src="<%- JS_FILES[i] %>"></script>
+  <% } %>
+  <% } %>
   </body>
 </html>

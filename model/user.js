@@ -5,10 +5,11 @@
 
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
+var gravatar = require('gravatar');
 var Schema = mongoose.Schema;
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-
+var Q = require("q");
 var SALT_WORK_FACTOR = 10;
 
 var UserSchema = new Schema({
@@ -23,12 +24,36 @@ mongoose.model('User', UserSchema);
 
 var User = mongoose.model('User');
 
+User.checkNicknameUniqness = function(nickname, skip) {
+  // returns q object
+  var defered = Q.defer();
+  if (!skip) {
+    User.findOne({nickname: nickname}, function(err, user) {
+      if (err) {
+        defered.reject(err);
+      }
+      else if (user) {
+        defered.reject(new Error("nickname is not uniq: " + nickname));
+      }
+      else {
+        defered.resolve(true);
+      }
+    });
+  }
+  else {
+    defered.resolve(true);
+  }
+  return defered.promise;
+};
+
 /**
  * save hook
  * 1. before saving user object, automatically encrypt password field with
  *    bcrypt.
  * 2. update timestamp
  * 3. if not specified, automatically fill created_at field
+ * 4. if not nickname is specified, return error
+ * 5. check the nickname uniqness
  **/
 UserSchema.pre('save', function(next) {
   var user = this;
@@ -42,15 +67,32 @@ UserSchema.pre('save', function(next) {
   if (!user.created_at) {
     user.created_at = now;
   }
-  if(!user.isModified('password')) return next();
-  bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
-    if(err) return next(err);
-    bcrypt.hash(user.password, salt, function(err, hash) {
-      if(err) return next(err);
-      user.password = hash;
-      next();
-    });
-  });
+  if (!user.nickname) {
+    return next(new Error("need to specify nickname"));
+  }
+  else if (!user.password) {
+    return next(new Error("need to specify password"));
+  }
+  else {
+    return User.checkNicknameUniqness(user.nickname,
+                                      !user.isModified("nickname"))
+      .then(function() {
+        if (user.isModified("password")) {
+          bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
+            if(err) return next(err);
+            bcrypt.hash(user.password, salt, function(err, hash) {
+              if(err) return next(err);
+              user.password = hash;
+              next();
+            });
+          });
+        }
+        else {
+          next();
+        }
+      })
+      .fail(next);
+  }
 });
 
 // Password verification
@@ -62,33 +104,13 @@ User.prototype.comparePassword = function(candidatePassword, cb) {
   });
 };
 
-// create new user
-// cb := function(error, object)
-User.newUser = function(spec, cb) {
-  if (!spec.nickname) {
-    cb(new Error('No nickname is specified'));
-  }
-  else if (!spec.password) {
-    cb(new Error('No password is specified'));
-  }
-  else {
-    // check the uniqness
-    User.findOne({nickname: spec.nickname}, function(err, user) {
-      if (err) {
-        cb(err);
-      }
-      else if (user) {
-        cb(new Error('nickname: ' + spec.nickname + ' is already used'));
-      }
-      else {
-        var user = new User(spec);
-        user.save(function(err) {
-          cb(err, user);
-        });
-      }
-    });
-  }
+// returns the icon of url using gravatar
+User.prototype.getIconURL = function(spec) {
+  var self = this;
+  if (!spec) spec = {s: '100'};
+  return gravatar.url(self.email, spec);
 };
+
 
 // registering passport methods
 passport.serializeUser(function(user, done) {
