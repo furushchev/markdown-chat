@@ -31,4 +31,27 @@ $(function(){
       sendFormData();
     }
   });
+
+  // update #volume-button according to the cookir
+  if ($.cookie("volume-enabled") === "false") {
+    $(this).find("#volume-button .glyphicon-volume-up")
+      .removeClass("glyphicon-volume-up")
+      .addClass("glyphicon-volume-off");
+  }
+  $("#volume-button").click(function(e) {
+    e.preventDefault();
+    if ($(this).find(".glyphicon-volume-up").length == 0) {
+      $(this).find(".glyphicon-volume-off")
+        .removeClass("glyphicon-volume-off")
+        .addClass("glyphicon-volume-up");
+      $.cookie("volume-enabled", true, {expires: 7});
+    }
+    else {
+      $(this).find(".glyphicon-volume-up")
+        .removeClass("glyphicon-volume-up")
+        .addClass("glyphicon-volume-off");
+      $.cookie("volume-enabled", false, {expires: 7});
+    }
+    return false;
+  });
 });
