@@ -1,27 +1,27 @@
-var mongoose = require("mongoose");
-var q = require("q");
-var gravatar = require("gravatar");
+var mongoose = require('mongoose');
+var q = require('q');
+var gravatar = require('gravatar');
 
-exports.get_url = "/user/:id";
+exports.get_url = '/user/:id';
 
 exports.get = function(req, res, next) {
   var user_id = req.params.id;
-  var Say = mongoose.model("Say");
-  var User = mongoose.model("User");
+  var Say = mongoose.model('Say');
+  var User = mongoose.model('User');
   var my_user_id = null;
   if (req.isAuthenticated()) {
     my_user_id = req.user._id;
   }
   User.findById(user_id, function(err, user) {
-    if (err != null) {
+    if (err !== null) {
       next(err);
     }
-    else if (user == null) {
+    else if (user === null) {
       next(404);
     }
-    else { 
+    else {
       Say.find({user: user_id})
-        .populate("user")
+        .populate('user')
         .exec(function(err, says) {
           if (!says) {
             says = [];
@@ -30,14 +30,12 @@ exports.get = function(req, res, next) {
             return say.renderMarkdown(my_user_id);
           }))
             .then(function(results) {
+              var latest_say = {};
               if (says.length > 0) {
-                var latest_say = says[0];
+                latest_say = says[0];
               }
-              else {
-                var latest_say = {};
-              }
-              res.render("user", {
-                title: process.env.MD_TITLE || "Markdown Chat",
+              res.render('user', {
+                title: process.env.MD_TITLE || 'Markdown Chat',
                 logged_in: req.isAuthenticated(),
                 nickname: (req.user || {}).nickname,
                 user_id: (req.user || {})._id,
