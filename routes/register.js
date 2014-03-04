@@ -9,14 +9,14 @@ exports.get_url = '/register';
 exports.get = function(req, res){
   var error = req.flash('error');
   res.render('register', {
-    title: process.env.MD_TITLE || "Markdown Chat",
+    title: process.env.MD_TITLE || 'Markdown Chat',
     error: error,
     logged_in: false
   });
 };
 
 exports.post_url = '/register';
-exports.post = function(req, res, nex) {
+exports.post = function(req, res, next) {
   // creating user
   var nickname = req.param('nickname');
   var email = req.param('email');
@@ -53,8 +53,12 @@ exports.post = function(req, res, nex) {
       else {
         // success to create new account, force to login automatically
         req.login(user, function(err) {
-          if (err) next(err);
-          else res.redirect('/');
+          if (err) {
+            next(err);
+          }
+          else {
+            res.redirect('/');
+          }
         });
       }
     });
