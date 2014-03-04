@@ -65,8 +65,12 @@
   
   <div class="chat-input-button-area">
     <div class="row">
+      <div class="col-md-1 col-md-offset-10">
+        <button type="button" id="volume-button" class="pull-right"><span class="glyphicon glyphicon-volume-up"></span></button>
+      </div>
+      <div class="col-md-1">
       <div class="send-button-area">
-        <div class="col-md-2 col-md-offset-10">
+        
           <button <% if (logged_in) { %> id="btn" <% } %>
                   class="btn btn-primary btn-sm pull-right">Send</button>
         </div>
