@@ -2,23 +2,23 @@
  * markdown chat
  */
 
-var express = require('express')
-, user = require('./routes/user')
-, http = require('http')
-, https = require('https')
-, mongoose = require('mongoose')
-, path = require('path')
-, ejs = require("ejs")
-, fs = require("fs")
-, passport = require("passport")
-, LocalStrategy = require('passport-local').Strategy
-, flash = require('connect-flash')
-, _ = require('lodash')
-, Q = require("q")
-, express_ex = require("./utils/express_ex")
-, $ = require("cheerio");
+var express = require('express');
+var user = require('./routes/user');
+var http = require('http');
+var https = require('https');
+var mongoose = require('mongoose');
+var path = require('path');
+var ejs = require('ejs');
+var fs = require('fs');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+var flash = require('connect-flash');
+var _ = require('lodash');
+var Q = require('q');
+var express_ex = require('./utils/express_ex');
+var $ = require('cheerio');
 
-var config = require("./config");
+var config = require('./config');
 
 var app = express();
 
@@ -33,7 +33,7 @@ else {
 }
 
 // load local libraries
-require("./model");
+require('./model');
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -51,10 +51,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // force to use https
-if ('production' == app.get('env')) {
+if ('production'.toString() === app.get('env').toString()) {
   app.use(function(req, res, next) {
     var schema = req.headers['x-forwarded-proto'];
-    if (schema === 'https') {
+    if (schema.toString() === 'https'.toString()) {
       // Already https; don't do anything special.
       next();
     }
@@ -67,8 +67,8 @@ if ('production' == app.get('env')) {
 
 
 if (process.env.MD_BASIC_USER && process.env.MD_BASIC_PASSWD) {
-   app.all("*", express_ex.basicAuth(function(user, pass) {
-     return user == process.env.MD_BASIC_USER && pass == process.env.MD_BASIC_PASSWD;
+   app.all('*', express_ex.basicAuth(function(user, pass) {
+     return user.toString() === process.env.MD_BASIC_USER.toString() && pass.toString() === process.env.MD_BASIC_PASSWD.toString();
    }));
    // app.use(function(req, res, next) {
    //   req.basicAuthUser = req.user;
@@ -80,12 +80,12 @@ if (process.env.MD_BASIC_USER && process.env.MD_BASIC_PASSWD) {
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 // development only
-if ('development' == app.get('env')) {
+if ('development'.toString() === app.get('env').toString()) {
   app.use(express.errorHandler());
 }
 
 // routing
-var routes = require("./routes");
+var routes = require('./routes');
 routes.routes.forEach(function(r) {
   if (r.get_url && r.get) {
     if (r.get_url instanceof Array) {
@@ -111,7 +111,7 @@ routes.routes.forEach(function(r) {
 
 var Say = mongoose.model('Say');
 // settings for socket.io
-var io = require('socket.io').listen(server, {"log level": 2});
+var io = require('socket.io').listen(server, {'log level': 2});
 
 server.listen(app.get('port'), function() {
   console.log('express server listening on port ' + app.get('port'));
@@ -122,12 +122,12 @@ var sockets = [];
 io.sockets.on('connection', function(socket) {
   sockets.push(socket);
   var user_id = null;
-  var User = mongoose.model("User");
+  var User = mongoose.model('User');
   var pushActiveUsers = function() {
     var active_user_ids = _(clients).filter().uniq().value();
 
     User.find({_id: {$in: active_user_ids}}, function(err, users) {
-      if (err != null) {
+      if (err !== null) {
         console.log(err);
       }
       else {
@@ -140,13 +140,13 @@ io.sockets.on('connection', function(socket) {
         socket.emit('users active', data);
       }
     });
-  }
+  };
   
   pushActiveUsers();
   socket.on('disconnect', function() {
     if (user_id) {
       clients.splice(clients.indexOf(user_id), 1);
-      console.log(clients.length + " clients");
+      console.log(clients.length + ' clients');
     }
     pushActiveUsers();
   });
@@ -164,10 +164,10 @@ io.sockets.on('connection', function(socket) {
     Say.countObject()
       .then(function(say_count) {
         Say.find()
-          .sort([['date', "ascending"]])
+          .sort([['date', 'ascending']])
           .skip(Math.max(say_count - config.PAGE_MAX, 0))
           .limit(config.PAGE_MAX)
-          .populate("user")
+          .populate('user')
           .exec(function(err, docs) {
             socket.emit('msg open', docs.map(function(doc) {
               if (user_id && doc.user._id.toString() === user_id.toString()) {
@@ -189,22 +189,22 @@ io.sockets.on('connection', function(socket) {
       });
   });
 
-  socket.on("msg edit", function(data) {
+  socket.on('msg edit', function(data) {
     var say_id = data.say_id;
     var markdown = data.markdown;
     Say.find({_id: say_id})
-      .populate("user")
+      .populate('user')
       .exec(function(err, says) {
         var say = null;
         if (says.length === 1) {
           say = says[0];
         }
         if (err) {
-          console.log("failed to find say object");
+          console.log('failed to find say object');
           console.log(err);
         }
-        else if (say == null) {
-          console.log("cannot find say: " + say_id);
+        else if (say === null) {
+          console.log('cannot find say: ' + say_id);
         }
         else {
           say.updateMarkdown(markdown)
@@ -212,7 +212,7 @@ io.sockets.on('connection', function(socket) {
               // broadcasting the message
               sockets.forEach(function(socket) {
                 var the_user_id = socket.user_id;
-                socket.emit("msg changed", {
+                socket.emit('msg changed', {
                   html: html,
                   say_id: say_id,
                   raw_markdown: markdown,
@@ -221,7 +221,7 @@ io.sockets.on('connection', function(socket) {
               });
             })
             .fail(function(err) {
-              console.log("failed to update markdown");
+              console.log('failed to update markdown');
               console.log(err);
             });
         }
@@ -240,7 +240,7 @@ io.sockets.on('connection', function(socket) {
       user: user_id
     });
     // populate user
-    Say.populate(say, {path: "user"}, function(err, say) {
+    Say.populate(say, {path: 'user'}, function(err, say) {
       say.renderMarkdown(user_id)
         .then(function(me_html) {
           say.renderMarkdown()
@@ -271,15 +271,15 @@ io.sockets.on('connection', function(socket) {
     if (say_id) {
       Say.findById(say_id, function(err, say) {
         if (err) {
-          console.log("[msg delete] failed to find say");
+          console.log('[msg delete] failed to find say');
         }
         else if (!say) {
-          console.log("[msg delete] cannod find say");
+          console.log('[msg delete] cannod find say');
         }
         else {
           say.remove(function(err) {
             if (err) {
-              console.log("[msg delete] failed to remove say object");
+              console.log('[msg delete] failed to remove say object');
             }
             else {
               socket.broadcast.emit('msg delete-one', {say_id: say_id});
@@ -288,7 +288,7 @@ io.sockets.on('connection', function(socket) {
         }
       });
     }
-    //console.log("msg delete");
+    //console.log('msg delete');
     //console.log(data);
   });
 
