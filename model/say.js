@@ -1,13 +1,13 @@
 // model/say.js
 
-var mongoose = require("mongoose")
-, util = require('util')
-, https = require('https')
-, Q = require("q")
-, $ = require("cheerio")
-, ejs = require("ejs")
-, _ = require("lodash")
-, fs = require("fs");
+var mongoose = require('mongoose');
+var util = require('util');
+var https = require('https');
+var Q = require('q');
+var $ = require('cheerio');
+var ejs = require('ejs');
+var _ = require('lodash');
+var fs = require('fs');
 
 var Schema = mongoose.Schema;
 var SaySchema = new Schema({
@@ -57,26 +57,26 @@ Say.renderMarkdownByGithub = function(input_md) {
   req.write(input_md);
   req.end();
   return defered.promise;
-}
+};
 
 Say.forceToUseBlank = function(html) {
   // force to use _target="blank" attributes in a tags
   var $md = $(html);
-  $md.find("a").attr("target", "_blank");
-  return $("<div>").append($md.clone()).html();
+  $md.find('a').attr('target', '_blank');
+  return $('<div>').append($md.clone()).html();
 };
 
-var chat_ejs = fs.readFileSync("views/chat.ejs", "utf8"); // node-dev cannot ditect the change of chat.ejs
-var chat_me_ejs = fs.readFileSync("views/chat_me.ejs", "utf8"); // node-dev cannot ditect the change of chat.ejs
+var chat_ejs = fs.readFileSync('views/chat.ejs', 'utf8'); // node-dev cannot ditect the change of chat.ejs
+var chat_me_ejs = fs.readFileSync('views/chat_me.ejs', 'utf8'); // node-dev cannot ditect the change of chat.ejs
 
 Say.prototype.readableDateStr = function() {
   var self = this;
-  var date_str = self.date.getFullYear() + "/"
-    + (self.date.getMonth() + 1) + "/"
-    + (self.date.getDate()) + " "
-    + (self.date.getHours()) + ":" + (self.date.getMinutes());
+  var date_str = self.date.getFullYear() + '/'
+    + (self.date.getMonth() + 1) + '/'
+    + (self.date.getDate()) + ' '
+    + (self.date.getHours()) + ':' + (self.date.getMinutes());
   return date_str;
-}
+};
 
 Say.prototype.renderWithEJS = function() {
   try {
@@ -89,7 +89,7 @@ Say.prototype.renderWithEJS = function() {
   } catch(e) {
     console.log(e);
   }
-}
+};
 
 Say.prototype.renderMeWithEJS = function() {
   try {
@@ -101,7 +101,7 @@ Say.prototype.renderMeWithEJS = function() {
   } catch(e) {
     console.log(e);
   }
-}
+};
 
 Say.prototype.updateMarkdown = function(markdown) {
   var self = this;
@@ -113,7 +113,7 @@ Say.prototype.updateMarkdown = function(markdown) {
       defered.resolve(githubhtml);
       self.save();
       return defered.promise;
-    })
+    });
 };
 
 
@@ -127,11 +127,12 @@ Say.prototype.renderMarkdown = function(user_id) {
   var self = this;
   if (self.markdown) {
     var defered = Q.defer();
+    var rendered_html = null;
     if (user_id && self.user && user_id.toString() === self.user._id.toString()) {
-      var rendered_html = self.renderMeWithEJS();
+      rendered_html = self.renderMeWithEJS();
     }
     else {
-      var rendered_html = self.renderWithEJS();
+      rendered_html = self.renderWithEJS();
     }
     // update the markdown property
     defered.resolve(rendered_html); // SetTimeout required?
@@ -141,11 +142,12 @@ Say.prototype.renderMarkdown = function(user_id) {
     return self.updateMarkdown(self.raw_markdown)
       .then(function(githubhtml) {
         var defered = Q.defer();
+        var rendered_html = null;
         if (user_id && self.user && user_id.toString() === self.user._id.toString()) {
-          var rendered_html = self.renderMeWithEJS();
+          rendered_html = self.renderMeWithEJS();
         }
         else {
-          var rendered_html = self.renderWithEJS();
+          rendered_html = self.renderWithEJS();
         }
         defered.resolve(rendered_html); // SetTimeout required?
         return defered.promise;
@@ -157,10 +159,12 @@ Say.prototype.renderMarkdown = function(user_id) {
 Say.countObject = function() {
   var deferred = Q.defer();
   Say.count(function(err, count) {
-    if (err)
+    if (err) {
       deferred.reject(err);
-    else
+    }
+    else {
       deferred.resolve(count);
+    }
   });
   return deferred.promise;
 };
