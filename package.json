@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "postinstall": "./node_modules/bower/bin/bower install"
+    "postinstall-not-used-now": "./node_modules/bower/bin/bower install"
   },
   "engines": {
     "node": "0.10.3",
