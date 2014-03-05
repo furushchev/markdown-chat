@@ -1,0 +1,5 @@
+{
+    "name": "taboverride",
+    "version": "4.0.2",
+    "main": "./build/output/taboverride.js"
+}
