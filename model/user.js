@@ -9,7 +9,7 @@ var gravatar = require('gravatar');
 var Schema = mongoose.Schema;
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var Q = require("q");
+var Q = require('q');
 var SALT_WORK_FACTOR = 10;
 
 var UserSchema = new Schema({
@@ -33,7 +33,7 @@ User.checkNicknameUniqness = function(nickname, skip) {
         defered.reject(err);
       }
       else if (user) {
-        defered.reject(new Error("nickname is not uniq: " + nickname));
+        defered.reject(new Error('nickname is not uniq: ' + nickname));
       }
       else {
         defered.resolve(true);
@@ -68,20 +68,24 @@ UserSchema.pre('save', function(next) {
     user.created_at = now;
   }
   if (!user.nickname) {
-    return next(new Error("need to specify nickname"));
+    return next(new Error('need to specify nickname'));
   }
   else if (!user.password) {
-    return next(new Error("need to specify password"));
+    return next(new Error('need to specify password'));
   }
   else {
     return User.checkNicknameUniqness(user.nickname,
-                                      !user.isModified("nickname"))
+                                      !user.isModified('nickname'))
       .then(function() {
-        if (user.isModified("password")) {
+        if (user.isModified('password')) {
           bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
-            if(err) return next(err);
+            if(err) {
+              return next(err);
+            }
             bcrypt.hash(user.password, salt, function(err, hash) {
-              if(err) return next(err);
+              if(err) {
+                return next(err);
+              }
               user.password = hash;
               next();
             });
@@ -99,7 +103,9 @@ UserSchema.pre('save', function(next) {
 // candidatePassword is not encrypted one
 User.prototype.comparePassword = function(candidatePassword, cb) {
   bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
-    if(err) return cb(err);
+    if(err) {
+      return cb(err);
+    }
     cb(null, isMatch);
   });
 };
@@ -107,7 +113,9 @@ User.prototype.comparePassword = function(candidatePassword, cb) {
 // returns the icon of url using gravatar
 User.prototype.getIconURL = function(spec) {
   var self = this;
-  if (!spec) spec = {s: '100'};
+  if (!spec) {
+    spec = {s: '100'};
+  }
   return gravatar.url(self.email, spec);
 };
 
@@ -128,7 +136,9 @@ passport.use(new LocalStrategy(function(nickname, password, done) {
     if (err) { return done(err); }
     if (!user) { return done(null, false, { message: 'Unknown user: ' + nickname }); }
     user.comparePassword(password, function(err, isMatch) {
-      if (err) return done(err);
+      if (err) {
+        return done(err);
+      }
       if(isMatch) {
         return done(null, user);
       } else {

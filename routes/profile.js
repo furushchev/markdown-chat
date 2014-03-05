@@ -1,14 +1,14 @@
 // routes/profile.js
 
-exports.get_url = "/profile";
+exports.get_url = '/profile';
 
 exports.get = function(req, res) {
   if (!req.isAuthenticated()) {
-    res.redirect("/");
+    res.redirect('/');
   }
   else {
-    res.render("profile", {
-      title: process.env.MD_TITLE || "Markdown Chat",
+    res.render('profile', {
+      title: process.env.MD_TITLE || 'Markdown Chat',
       logged_in: req.isAuthenticated(),
       nickname: req.user.nickname,
       user_id: req.user._id,
@@ -19,11 +19,11 @@ exports.get = function(req, res) {
   }
 };
 
-exports.post_url = "/profile";
+exports.post_url = '/profile';
 
 exports.post = function(req, res) {
   if (!req.isAuthenticated()) {
-    res.redirect("/profile");
+    res.redirect('/profile');
   }
   else {
     var nickname = req.param('nickname');
@@ -32,8 +32,8 @@ exports.post = function(req, res) {
     var pass = req.param('password-input');
     var repass = req.param('re-password-input');
     if (!nickname) {
-      req.flash("error", "You need to fill nickname");
-      res.redirect("/profile")
+      req.flash('error', 'You need to fill nickname');
+      res.redirect('/profile');
     }
     else {
       // check we need to update pass/repass
@@ -43,27 +43,27 @@ exports.post = function(req, res) {
         // changing pass
         req.user.comparePassword(old_pass, function(err, matchp) {
           if (err) {
-            req.flash("error", err.message);
-            res.redirect("/profile");
+            req.flash('error', err.message);
+            res.redirect('/profile');
           }
           if (!matchp) {
-            req.flash("error", "password(old) does not match with current password");
-            res.redirect("/profile");            
+            req.flash('error', 'password(old) does not match with current password');
+            res.redirect('/profile');
           }
           else {
             if (pass.toString() !== repass.toString()) {
-              req.flash("error", "does not match password and reentered password");
-              res.redirect("/profile");
+              req.flash('error', 'does not match password and reentered password');
+              res.redirect('/profile');
             }
             else {
               req.user.password = pass;
               req.user.save(function(err) {
                 if (err) {
-                  req.flash("error", err.message);
-                  res.redirect("/profile");
+                  req.flash('error', err.message);
+                  res.redirect('/profile');
                 }
                 else {
-                  res.redirect("/profile");
+                  res.redirect('/profile');
                 }
               });
             }
@@ -73,11 +73,11 @@ exports.post = function(req, res) {
       else {
         req.user.save(function(err) {
           if (err) {
-            req.flash("error", err.message);
-            res.redirect("/profile");
+            req.flash('error', err.message);
+            res.redirect('/profile');
           }
           else {
-            res.redirect("/profile");
+            res.redirect('/profile');
           }
         });
       }
