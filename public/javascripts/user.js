@@ -8,7 +8,7 @@ $(function() {
   connection.open();
   // create say objects from html
   
-  $("#chats .say-wrapper").each(function() {
+  $('#chats .say-wrapper').each(function() {
     var say = Say.createFromHTML($(this));
     say.registerCallback($(this), connection);
   });
