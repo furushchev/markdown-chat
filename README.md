@@ -1,4 +1,4 @@
-# Markdown-Chat
+# Markdown-Chat [![Build Status](https://travis-ci.org/markdown-chat/markdown-chat.png?branch=master)](https://travis-ci.org/markdown-chat/markdown-chat)
 
 markdownでチャットするとはかどる!
 
