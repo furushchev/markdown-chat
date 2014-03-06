@@ -1,6 +1,6 @@
 # Markdown-Chat
 
-markdownでチャットするとはかどる・・・はず
+markdownでチャットするとはかどる!
 
 [デモ](http://markdown-chat.herokuapp.com)
 
