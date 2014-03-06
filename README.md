@@ -8,6 +8,8 @@ markdownでチャットするとはかどる!
 
 ```bash
 cd /path/to/markdown-chat
+sudo aptitude install mongodb # ubuntu
+brew install mongodb # os x
 npm install
 npm install -g bower  # インストールしてないなら
 bower install
