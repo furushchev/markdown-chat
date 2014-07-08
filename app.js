@@ -109,6 +109,9 @@ routes.routes.forEach(function(r) {
   }
 });
 
+// plugins
+var plugins = require('./plugins').plugins;
+
 var Say = mongoose.model('Say');
 // settings for socket.io
 var io = require('socket.io').listen(server, {'log level': 2});
@@ -292,8 +295,30 @@ io.sockets.on('connection', function(socket) {
     //console.log(data);
   });
 
+  socket.on('msg push', function(data){
+    var mentions = plugins.containsMentions(data.msg);
+    if (mentions.find("jskbot")){
+      var msgs = data.msg.split(' ').slice(1).join(' ');
+      plugins.getZatsudan(msgs, function(err, res, body){
+        if (!err && res.statusCode == 200){
+          var send_data = {
+            me_html: null,
+            other_html: null,
+            date: now,
+            _id: 'jskbot',
+            user_id: user_id
+          };
+          socket.broadcast.emit('msg push', send_data);
+        } else {
+          console.log(err);
+        }
+      });
+    }
+  });
+
   socket.on('disconnect', function() {
     console.log('disconnected.');
   });
+
 });
 
