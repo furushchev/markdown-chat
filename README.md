@@ -1,6 +1,6 @@
-# Markdown-Chat
+# Markdown-Chat [![Build Status](https://travis-ci.org/markdown-chat/markdown-chat.png?branch=master)](https://travis-ci.org/markdown-chat/markdown-chat)
 
-markdownでチャットするとはかどる・・・はず
+markdownでチャットするとはかどる!
 
 [デモ](http://markdown-chat.herokuapp.com)
 
@@ -8,6 +8,8 @@ markdownでチャットするとはかどる・・・はず
 
 ```bash
 cd /path/to/markdown-chat
+sudo aptitude install mongodb # ubuntu
+brew install mongodb # os x
 npm install
 npm install -g bower  # インストールしてないなら
 bower install
